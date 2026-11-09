@@ -99,6 +99,7 @@ textarea{resize:vertical;line-height:1.6}
 .hint{font-size:.82rem;color:var(--soft);margin:.4rem 0 0}
 .method{font-size:.88rem;color:var(--soft);margin:0 0 1.3rem;font-style:italic}
 .field{margin-bottom:1.6rem}
+.fhint{font-size:.9rem;color:var(--soft);margin:-.2rem 0 .6rem;line-height:1.45}
 .chips{display:flex;flex-wrap:wrap;gap:.4rem}
 .chips button{font-size:.88rem;padding:.4rem .9rem;background:var(--bg);border-color:transparent}
 .chips .rm{margin-left:-.55rem;padding:.35rem .55rem;border-color:transparent;color:var(--soft)}
@@ -316,8 +317,9 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
   }
   const val=(x,s)=>typeof x==="function"?x(s):x;
   const filled=v=>Array.isArray(v)?v.length>0:!!(v&&String(v).trim());
-  const FANT=[{id:"setting",name:"Where and when"},{id:"roles",name:"Who’s there, and who you are"},{id:"props",name:"Outfits, props and tools"},{id:"f_begin",name:"How it begins"},{id:"f_build",name:"How it builds and peaks"},{id:"f_end",name:"How it ends"},{id:"senses",name:"Words, sounds, textures, smells"}];
-  const fv=(a,e)=>e.id==="props"
+  const FANT=[{id:"setting",name:"Where and when"},{id:"roles",name:"Who’s there"},{id:"self",name:"Who you are in it"},{id:"props",name:"Outfits, props and tools"},{id:"f_begin",name:"How it begins"},{id:"f_build",name:"How it builds and peaks"},{id:"f_end",name:"How it ends"},{id:"senses",name:"Words, sounds, textures, smells"}];
+  const fv=(a,e)=>e.id==="setting" ? [...(a.whereSel||[]),a.setting||""].filter(filled).join(", ")
+    : e.id==="props"
     ? [...(a.outfits||[]),...(a.propsSel||[]),...(a.tools||[]),a.props||""].filter(filled).join(", ")
     : a[e.id];
 
@@ -325,8 +327,7 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
     {name:"Heart", title:"What is this scene for?",
      method:"Every scene starts with why. **The feeling it’s for matters more than the acts in it**, and it guides every step that follows.",
      fields:[
-      {id:"feel",type:"chips",label:"Feelings that pull at you",options:["Wanted","Seen","Held","Adored","Powerful","Surrendered","Playful","Free","Safe","Wild","Taken care of","Let go"]},
-      {id:"longing",type:"area",rows:3,label:"With my partner I long to feel…"}
+      {id:"feel",type:"chips",label:"What do you want to feel?",options:["Wanted","Seen","Held","Adored","Powerful","Surrendered","Playful","Free","Safe","Wild","Taken care of","Let go"]}
      ]},
     {name:"Spark", title:"Find the spark",
      method:s=>{ const t=target(s); return t
@@ -341,9 +342,6 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
       {id:"peakWhy",type:"area",rows:3,label:s=>{ const t=target(s); return t
         ? `What exactly made you feel ${t} there? Name the moment it peaked.`
         : "What made it so charged? Name the exact moment it peaked."; }},
-      {id:"stronger",type:"area",rows:3,label:s=>{ const t=target(s); return t
-        ? `If feeling ${t} grew even stronger, what would happen next?`
-        : "If it grew even stronger, what would happen next?"; }},
       {id:"body",type:"area",rows:2,label:s=>{ const t=target(s); return t
         ? `Where in your body do you notice feeling ${t}, even now as you write?`
         : "Where in your body do you notice it, even now as you write?"; }}
@@ -356,10 +354,12 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
       {id:"tension",type:"area",rows:3,label:"Attraction plus an obstacle creates excitement. What’s the tension or obstacle here?"}
      ]},
     {name:"Fantasy", title:"Write the fantasy version",
-     method:"Now turn the spark into a scene, the way it plays in your head, with nothing held back. **This version is only for you**, and a fantasy is not a request. In the next steps you’ll shape it into a scene you can actually play.",
+     method:"**A fantasy can stay a fantasy.** Here you can lean all the way into it, without worrying about how realistic or reasonable it is. This is about painting a vivid, colourful picture.",
      fields:[
-      {id:"setting",type:"text",label:"Where and when"},
-      {id:"roles",type:"text",label:"Who’s there, and who are you in it"},
+      {id:"whereSel",type:"chips",label:"Where does it happen?",options:["Bedroom","A hotel","Outdoors","A public place","Somewhere forbidden","A play space","At work","Somewhere new"]},
+      {id:"setting",type:"text",label:"Any details about the place or time?"},
+      {id:"roles",type:"text",label:"Who’s there?"},
+      {id:"self",type:"text",label:"Who are you in it?",hint:"In a fantasy you don’t have to be yourself. You might be a version of you, or play a role: the one in charge, the one being cared for, a stranger, a guide, someone bolder or softer than everyday you."},
       {id:"outfits",type:"chips",label:"Outfits: what are you, or they, wearing?",options:["Lingerie","Suit, or shirt and tie","Uniform","Leather","Latex","A costume","Heels or boots","Something of theirs","Nothing at all"]},
       {id:"propsSel",type:"chips",label:"Props",options:["Blindfold","Rope","Cuffs","Collar and leash","Candles","Feathers","Ice","Massage oil","A mirror","Music"]},
       {id:"tools",type:"chips",label:"Tools and toys",options:["Hands only","Flogger","Paddle","Crop","Vibrator or wand","Dildo or plug","Gag","Clamps","Spreader bar"]},
@@ -397,17 +397,22 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
      method:"What your real scene needs to feel safe to play.",
      fields:[
       {id:"wheel",type:"choice",label:"In this scene I mainly want to…",options:["Take: I do, it’s for me","Serve: I do, it’s for you","Accept: you do, it’s for me","Allow: you do, it’s for you","It shifts during the scene"]},
-      {id:"limits",type:"area",rows:2,label:"Hard limits, and maybes that need care"},
-      {id:"signals",type:"text",label:"Stop and slow-down signals"},
-      {id:"checkins",type:"text",label:"How and when we check in"},
-      {id:"aftercare",type:"area",rows:2,label:"Aftercare I’d like, and can offer"}
+      {id:"limits",type:"area",rows:2,label:"Hard limits, and maybes that need care",hint:"Things that are a clear no for you, and things you might try with extra care. Only you decide what goes here."},
+      {id:"signals",type:"chips",label:"Stop and slow-down signals",hint:"Agree on at least one signal that works without words, for moments when speaking is hard.",
+       options:["Traffic lights: red = stop, yellow = slow down, green = more, please","Two taps when I can’t speak","Dropping an object I’m holding","A hand squeeze","Saying “pause”"]},
+      {id:"checkins",type:"chips",label:"How and when we check in",
+       options:["Before we start","Halfway through","Whenever intensity changes","Squeeze check: squeeze back if you’re okay","Colour check: “What colour are you?”","A look or a word","Afterwards"]},
+      {id:"aftercare",type:"chips",label:"Aftercare I’d like, and can offer",hint:"Aftercare is the care you give each other after a scene, to land and reconnect.",
+       options:["Cuddling","A blanket","Water and a snack","Talking it through","Quiet time together","Words of appreciation","A shower or bath","Some time alone","A check-in the next day"]}
      ]},
     {name:"Share", title:"Bring it to your partner",
      method:"Your scene is ready to share. **Reveal it in layers:** the feeling first, details when it feels safe on both sides.",
      fields:[
       {id:"opener",type:"area",rows:4,label:"Your opener",placeholder:"Lately I’ve been imagining… What draws me is feeling… I’d love to try a small version, like… And it’s completely fine if…"},
-      {id:"when",type:"text",label:"When and where to talk about it"},
-      {id:"hear",type:"text",label:"What would help me feel safe after sharing?"}
+      {id:"when",type:"chips",label:"When and where to talk about it",
+       options:["Somewhere private and relaxed","Not right before or during sex","On a walk","Over text first","Over dinner"]},
+      {id:"hear",type:"chips",label:"What would help me feel safe after sharing?",
+       options:["“Thank you for telling me”","“I’m not judging you”","Ask me questions","Tell me how it feels to hear this","Take your time, we can talk more later","Tell me one thing about it that interests you","It’s okay if it’s a no for you"]}
      ]}
   ];
 
@@ -434,6 +439,18 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
   const blank=()=>({id:newId(),name:"",a:{},created:Date.now(),updated:Date.now()});
   function load(){ try{ const v=JSON.parse(localStorage.getItem(KEY)); return Array.isArray(v)?v:[]; }catch(e){ return []; } }
   let scenes=load(), cur=null, stage=0;
+  // earlier versions stored these as text; keep that text as the scene's own option
+  function norm(sc){
+    ["signals","checkins","aftercare","when","hear"].forEach(id=>{
+      const v=sc.a[id];
+      if(typeof v==="string"){ sc.x=sc.x||{}; if(v.trim()){ sc.a[id]=[v.trim()]; sc.x[id]=[...(sc.x[id]||[]),v.trim()]; } else sc.a[id]=[]; }
+    });
+    const old=["Red: stop","Yellow: slow down","Green: more, please"];
+    if(Array.isArray(sc.a.signals)&&sc.a.signals.some(v=>old.includes(v)))
+      sc.a.signals=[...new Set(sc.a.signals.map(v=>old.includes(v)?"Traffic lights: red = stop, yellow = slow down, green = more, please":v))];
+    return sc;
+  }
+  scenes.forEach(norm);
   try{ const id=localStorage.getItem(CUR); cur=scenes.find(s=>s.id===id)||null; }catch(e){}
   if(!cur) cur=blank();
 
@@ -474,9 +491,9 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
     add(0,"It’s for feeling",list2(target(s)||[],a.longing?clip(a.longing,90):[]));
     add(1,"The spark",clip(a.peak,140));
     add(2,"The charge",list2(a.corner||[],a.lehm||[],a.tension?clip(a.tension,80):[]));
-    add(3,"The fantasy",list2(a.setting||[],a.roles||[],[a.f_begin,a.f_build,a.f_end,a.story].filter(filled).map(t=>clip(t,50)).join(" → ")||[]));
+    add(3,"The fantasy",list2(a.whereSel||[],a.setting||[],a.roles||[],a.self||[],[a.f_begin,a.f_build,a.f_end,a.story].filter(filled).map(t=>clip(t,50)).join(" → ")||[]));
     add(5,"The real scene",[a.sc_begin,a.sc_build,a.sc_peak,a.sc_land].filter(filled).map(t=>clip(t,60)).join(" → "));
-    add(6,"The frame",list2(a.wheel||[],a.signals?"signals: "+clip(a.signals,40):[]));
+    add(6,"The frame",list2(a.wheel||[],filled(a.signals)?"signals: "+clip([].concat(a.signals).join(", "),50):[]));
     return rows;
   }
   function renderSofar(){
@@ -566,14 +583,18 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
         ab.onclick=doAdd;
         inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); doAdd(); } });
         add.append(inp,ab);
-        if(f.noOwn) wrap.append(lab,box); else wrap.append(lab,box,add);
+        const hintEl=f.hint?Object.assign(document.createElement("p"),{className:"fhint",textContent:f.hint}):null;
+        const parts=[lab]; if(hintEl) parts.push(hintEl); parts.push(box); if(!f.noOwn) parts.push(add);
+        wrap.append(...parts);
       }else{
         const lab=document.createElement("label"); lab.htmlFor=fid; lab.textContent=label;
         const el=f.type==="area"?document.createElement("textarea"):document.createElement("input");
         if(f.type==="area") el.rows=f.rows||4; else el.type="text";
         el.id=fid; el.value=cur.a[f.id]||""; if(f.placeholder) el.placeholder=f.placeholder;
         el.addEventListener("input",()=>{ cur.a[f.id]=el.value; commit(); });
-        wrap.append(lab,el);
+        wrap.append(lab);
+        if(f.hint){ const h=document.createElement("p"); h.className="fhint"; h.id=fid+"_h"; h.textContent=f.hint; wrap.append(h); el.setAttribute("aria-describedby",h.id); }
+        wrap.append(el);
       }
       stageEl.append(wrap);
     });
@@ -681,7 +702,7 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
     const join=v=>[].concat(v||[]).filter(F).join(", ");
     const sec=(title,body)=>body.trim()?`<section><h2>${E(title)}</h2>${body}</section>`:"";
     const para=v=>F(v)?`<p>${E(v)}</p>`:"";
-    const dl=rows=>{ const r=rows.filter(([,v])=>F(v)); return r.length?`<dl>${r.map(([k,v])=>`<dt>${E(k)}</dt><dd>${E(v)}</dd>`).join("")}</dl>`:""; };
+    const dl=rows=>{ const r=rows.filter(([,v])=>F(v)); return r.length?`<dl>${r.map(([k,v])=>`<dt>${E(k)}</dt><dd>${E(Array.isArray(v)?v.join(", "):v)}</dd>`).join("")}</dl>`:""; };
     let h=`<div class="sum"><h1>${E(sc.name||"My scene")}</h1><p class="sub">Scene Builder summary, ${E(fmt(Date.now()))}</p>`;
 
     const feels=(a.feel||[]).map(phrase);
@@ -726,7 +747,7 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
       const data=JSON.parse(await f.text());
       const incoming=(Array.isArray(data)?data:data.scenes||[]).filter(s=>s&&s.id&&s.a&&typeof s.a==="object");
       const known=new Set(scenes.map(s=>s.id)); let added=0;
-      incoming.forEach(s=>{ if(!known.has(s.id)){ scenes.push({id:s.id,name:s.name||"",a:s.a,x:s.x||{},quick:!!s.quick,incPrivate:!!s.incPrivate,created:s.created||Date.now(),updated:s.updated||Date.now()}); added++; } });
+      incoming.forEach(s=>{ if(!known.has(s.id)){ scenes.push(norm({id:s.id,name:s.name||"",a:s.a,x:s.x||{},quick:!!s.quick,incPrivate:!!s.incPrivate,created:s.created||Date.now(),updated:s.updated||Date.now()})); added++; } });
       persist(); renderList(); flash(`Restored ${added} ${added===1?"scene":"scenes"}`);
     }catch(e){ flash("That file isn’t a scenes backup"); }
     ev.target.value="";
@@ -745,7 +766,7 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
   function summaryText(sc){
     const a=sc.a, L=[], F=filled;
     const j=v=>[].concat(v||[]).filter(F).join(", ");
-    const sec=(t,rows)=>{ const r=rows.filter(([,v])=>F(v)); if(!r.length) return; L.push("", t.toUpperCase()); r.forEach(([k,v])=>L.push(k?`${k}: ${v}`:v)); };
+    const sec=(t,rows)=>{ const r=rows.filter(([,v])=>F(v)); if(!r.length) return; L.push("", t.toUpperCase()); r.forEach(([k,v])=>{ v=Array.isArray(v)?v.join(", "):v; L.push(k?`${k}: ${v}`:v); }); };
     L.push(sc.name||"My scene", "Scene Builder summary, "+fmt(Date.now()));
     sec("What it’s for",[["Feeling",j((a.feel||[]).map(phrase))],["",a.longing]]);
     sec("The spark",[["",a.peak],["",a.peakWhy],["",a.stronger]]);
