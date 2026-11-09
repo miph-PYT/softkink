@@ -19,16 +19,8 @@
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#1C1A15; --paper:#283022; --card:#2E2A22; --ink:#F2EADB; --soft:#B5AD98; --line:#4A4636;
-    --accent:#F2EADB; --accent-ink:#1C1A15; --peach:#E7A985; --field:#1A1F15; --answer:#F4C7A4; --fieldline:#4A5440; --sage:#4F5E3A; --rope:#7D8F5D; --danger:#EE8E80; color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#1C1A15; --paper:#283022; --card:#2E2A22; --ink:#F2EADB; --soft:#B5AD98; --line:#4A4636;
-  --accent:#F2EADB; --accent-ink:#1C1A15; --peach:#E7A985; --field:#1A1F15; --answer:#F4C7A4; --fieldline:#4A5440; --sage:#4F5E3A; --rope:#7D8F5D; --danger:#EE8E80; color-scheme:dark;
-}
+
+
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:1.05rem;line-height:1.55}
@@ -48,6 +40,11 @@ h1{font-family:var(--display);font-weight:900;font-size:clamp(2.8rem,11vw,4.4rem
 .news .check{font-weight:400;font-size:.95rem}
 .nlmsg{min-height:1.2em;font-size:.9rem;color:var(--danger);margin:.6rem 0}
 .nlmsg.ok{color:var(--soft)}
+.sendme{margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--line)}
+.sendme input[type=email]{width:100%;font:inherit;color:var(--answer,var(--ink));background:var(--field);border:1px solid var(--fieldline);border-radius:14px;padding:.55rem .8rem;margin-bottom:.8rem;outline:none}
+.sendme input[type=email]:focus{border-color:var(--accent)}
+.sendme .check{margin-bottom:.8rem}
+.sendme .hint{margin-top:.5rem}
 .startbtns{display:flex;gap:.5rem;flex-wrap:wrap}
 .toolbar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
 
@@ -148,17 +145,37 @@ footer .acts{margin-top:.6rem}
 .news{
   --card:#EBD3EE; --ink:#2E1A33; --soft:#5C4462; --line:#C9A9CE; --accent:#123B37; --accent-ink:#EBD3EE; --danger:#8A2A1E; color:var(--ink);
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){ --bg:#163B37; --ink:#E0F9FD; --soft:#A9CFCB; --line:rgba(224,249,253,.25); --title:#EBD3EE; --accent:#EBD3EE; --accent-ink:#163B37; --danger:#FFB4A6; }
-  :root:not([data-theme="light"]) .builder{ --paper:#1F4D48; --bg:#2A615B; --ink:#E0F9FD; --soft:#A9CFCB; --line:#3E7770; --accent:#E0F9FD; --accent-ink:#163B37; --peach:#D9B4DD; --sage:#3F857C; --rope:#5FB0A5; --field:#163B37; --fieldline:#3E7770; --answer:#F2C8F6; --danger:#FFB4A6; }
-  :root:not([data-theme="light"]) .news{ --card:#3A2A40; --ink:#F3E4F5; --soft:#CDB4D2; --line:#6A5070; --accent:#EBD3EE; --accent-ink:#2E1A33; --danger:#FFB4A6; }
-}
-:root[data-theme="dark"]{ --bg:#163B37; --ink:#E0F9FD; --soft:#A9CFCB; --line:rgba(224,249,253,.25); --title:#EBD3EE; --accent:#EBD3EE; --accent-ink:#163B37; --danger:#FFB4A6; }
-:root[data-theme="dark"] .builder{ --paper:#1F4D48; --bg:#2A615B; --ink:#E0F9FD; --soft:#A9CFCB; --line:#3E7770; --accent:#E0F9FD; --accent-ink:#163B37; --peach:#D9B4DD; --sage:#3F857C; --rope:#5FB0A5; --field:#163B37; --fieldline:#3E7770; --answer:#F2C8F6; --danger:#FFB4A6; }
-:root[data-theme="dark"] .news{ --card:#3A2A40; --ink:#F3E4F5; --soft:#CDB4D2; --line:#6A5070; --accent:#EBD3EE; --accent-ink:#2E1A33; --danger:#FFB4A6; }
+
+
+
+
 h1{color:var(--title)}
 .step.on .dot,.chips button[aria-pressed="true"]{color:#123B37}
 
+/* ---- Light palette: ice background, teal prompts and headings, lilac accents ---- */
+label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--prompt,var(--title,var(--ink)))}
+
+  :root{ --bg:#DEFAFD; --ink:#1C4A45; --soft:#4A716C; --line:#B5DDD9; --title:#2E968C; --prompt:#2E968C;
+    --accent:#2E968C; --accent-ink:#FFFFFF; --danger:#A0362A; }
+  .builder{ --paper:#FFFFFF; --bg:#DEFAFD; --ink:#1C4A45; --soft:#4A716C; --line:#C6E6E3;
+    --accent:#2E968C; --accent-ink:#FFFFFF; --peach:#EDD2EB; --sage:#BDE7E2; --rope:#2E968C;
+    --field:#FBF2FA; --fieldline:#EDD2EB; --answer:#1C4A45; }
+  .news{ --card:#EDD2EB; --ink:#1C4A45; --soft:#4A716C; --line:#D6B3D3; --accent:#2E968C; --accent-ink:#FFFFFF; }
+  button.primary{font-weight:700}
+
+
+/* ---- Dark mode: the two greens switch — teal background, ice headings and prompts ---- */
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#2E968C; --ink:#FFFFFF; --soft:#D6F4F1; --line:rgba(222,250,253,.45); --title:#DEFAFD; --prompt:#DEFAFD;
+    --accent:#DEFAFD; --accent-ink:#1C4A45; --danger:#FFD9D2; color-scheme:dark; }
+  .builder{ --paper:#237A72; --bg:#2E968C; --ink:#F4FEFF; --soft:#C9EEEA; --line:#3F9F95;
+    --accent:#DEFAFD; --accent-ink:#1C4A45; --peach:#EDD2EB; --sage:#4BAAA0; --rope:#DEFAFD;
+    --field:#1C6A63; --fieldline:#EDD2EB; --answer:#EDD2EB; --danger:#FFD9D2; }
+  .news{ --card:#EDD2EB; --ink:#1C4A45; --soft:#4A716C; --line:#D6B3D3; --accent:#1C4A45; --accent-ink:#EDD2EB; --prompt:#1C4A45; --danger:#8A2A1E; }
+  .mode button[aria-pressed="true"]{background:#DEFAFD;color:#1C4A45}
+}
+
+#name::placeholder{color:var(--soft);opacity:.75}
 #print{display:none}
 @media print{
   body{background:#fff;color:#000;font-size:11pt}
@@ -210,7 +227,7 @@ h1{color:var(--title)}
 
   <form class="news" id="news" novalidate>
     <h2>Stay in touch</h2>
-    <p>Join the Soft Kink newsletter for new tools, workshops and events. It’s optional, and the tool is yours either way.</p>
+    <p>Workshops, rope rituals, and reflections on kink, consent and intimacy. A few times a year, straight to your inbox. It’s optional, and the tool is yours either way.</p>
     <label for="nlEmail">Your email</label>
     <input type="email" id="nlEmail" autocomplete="email" placeholder="you@example.com">
     <label class="check"><input type="checkbox" id="nlConsent"> Yes, send me the Soft Kink newsletter. I can unsubscribe at any time.</label>
@@ -220,7 +237,6 @@ h1{color:var(--title)}
       <button type="button" id="skip">Begin without signing up</button>
     </div>
   </form>
-  <iframe name="nlFrame" id="nlFrame" title="Newsletter signup" hidden></iframe>
   </section>
 
   <div id="app" hidden>
@@ -242,7 +258,15 @@ h1{color:var(--title)}
     <div class="stage" id="stage"></div>
     <div class="finish" id="finish" hidden>
       <label class="check"><input type="checkbox" id="incPrivate"> Include my private fantasy version</label>
-      <p class="hint">Opens a one-page summary in your print dialog. Choose “Save as PDF” to download it.</p>
+      <p class="hint">Download summary opens a one-page summary in your print dialog. Choose “Save as PDF” to save it.</p>
+      <div class="sendme">
+        <label for="sendEmail">Or email it to yourself</label>
+        <input type="email" id="sendEmail" autocomplete="email" placeholder="you@example.com">
+        <label class="check"><input type="checkbox" id="sendNews"> Also sign me up for the Soft Kink newsletter. I can unsubscribe at any time.</label>
+        <button type="button" id="sendBtn">Email me my scene</button>
+        <p class="hint">Opens your own email app with your scene written out, ready to send to yourself. Nothing passes through Soft Kink.</p>
+        <p class="nlmsg" id="sendMsg" aria-live="polite"></p>
+      </div>
     </div>
     <div class="nav">
       <span class="status" id="status" aria-live="polite"></span>
@@ -276,6 +300,7 @@ h1{color:var(--title)}
   </footer>
 </main>
 <div id="print" aria-hidden="true"></div>
+<iframe name="nlFrame" id="nlFrame" title="Newsletter signup" hidden></iframe>
 
 <script>
 (function(){
@@ -708,8 +733,49 @@ h1{color:var(--title)}
   });
 
   // ---- welcome slide and newsletter ----
-  // Paste the values from the Zoho Campaigns embed code here to connect the signup.
-  const NEWSLETTER={action:"", emailField:"CONTACT_EMAIL", hidden:{}};
+  function postNews(email){
+    const f=document.createElement("form");
+    f.method="POST"; f.action=NEWSLETTER.action; f.target="nlFrame"; f.hidden=true;
+    const add=(n,v)=>{ const i=document.createElement("input"); i.type="hidden"; i.name=n; i.value=v; f.append(i); };
+    Object.entries(NEWSLETTER.hidden).forEach(([n,v])=>add(n,v));
+    add(NEWSLETTER.emailField,email);
+    document.body.append(f); f.submit(); f.remove();
+  }
+  // plain-text version of the summary, for email
+  function summaryText(sc){
+    const a=sc.a, L=[], F=filled;
+    const j=v=>[].concat(v||[]).filter(F).join(", ");
+    const sec=(t,rows)=>{ const r=rows.filter(([,v])=>F(v)); if(!r.length) return; L.push("", t.toUpperCase()); r.forEach(([k,v])=>L.push(k?`${k}: ${v}`:v)); };
+    L.push(sc.name||"My scene", "Scene Builder summary, "+fmt(Date.now()));
+    sec("What it’s for",[["Feeling",j((a.feel||[]).map(phrase))],["",a.longing]]);
+    sec("The spark",[["",a.peak],["",a.peakWhy],["",a.stronger]]);
+    sec("What gives it charge",[["",j([...(a.corner||[]),...(a.lehm||[])])],["",a.tension]]);
+    const kc=FANT.filter(e=>F(fv(a,e))&&["Keep it","Change it"].includes(a["pl_"+e.id]))
+      .map(e=>[e.name,a["pl_"+e.id]==="Change it"?(a["pc_"+e.id]||"changed, details to work out"):fv(a,e)]);
+    sec("The real scene",[["How it begins",a.sc_begin],["How it builds",a.sc_build],["The peak",a.sc_peak],["How it ends and lands",a.sc_land],...kc,["To get or prepare",j([...(a.prepSel||[]),a.prep])],["Smallest version to try first",a.first]]);
+    sec("The frame",[["Who it’s for, who’s doing",a.wheel],["Limits and maybes",a.limits],["Signals",a.signals],["Check-ins",a.checkins],["Aftercare",a.aftercare]]);
+    sec("Bringing it to my partner",[["",a.opener],["When and where",a.when],["What would help me feel safe after sharing",a.hear]]);
+    if(sc.incPrivate) sec("The fantasy version (private)",[...FANT.map(e=>[e.name,fv(a,e)]),["What happens",a.story]]);
+    L.push("","A fantasy is not a request. Any part of this can change, and every yes can become a no.");
+    return L.join("\n");
+  }
+  $("sendBtn").onclick=()=>{
+    const msg=$("sendMsg"), email=$("sendEmail").value.trim();
+    msg.className="nlmsg";
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg.textContent="Please enter a valid email address."; $("sendEmail").focus(); return; }
+    if(!hasContent(cur)){ msg.textContent="Write something first."; return; }
+    commit();
+    let note="Your email app should open with your scene.";
+    if($("sendNews").checked){
+      if(NEWSLETTER.action){ postNews(email); note+=" You’re signed up for the newsletter too: check your inbox to confirm."; }
+      else note+=" (The newsletter signup isn’t connected yet.)";
+    }
+    const subject="My scene: "+(cur.name||"Scene Builder");
+    location.href=`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summaryText(cur))}`;
+    msg.className="nlmsg ok"; msg.textContent=note;
+  };
+  // Soft Kink newsletter on Kit (form 9542106). Kit sends its own confirmation email (double opt-in).
+  const NEWSLETTER={action:"https://app.kit.com/forms/9542106/subscriptions", emailField:"email_address", hidden:{}};
   const STARTED="scenes.started";
   function showApp(on){
     $("welcome").hidden=on; $("app").hidden=!on;
@@ -717,7 +783,7 @@ h1{color:var(--title)}
   }
   function begin(){ try{ localStorage.setItem(STARTED,"1"); }catch(e){} showApp(true); }
   $("skip").onclick=begin;
-  $("about").onclick=()=>{ $("skip").textContent="Back to my scene"; showApp(false); };
+  $("about").onclick=()=>{ $("skip").textContent="Continue to Scene Builder"; showApp(false); };
   $("news").addEventListener("submit",e=>{
     e.preventDefault();
     const msg=$("nlMsg"), email=$("nlEmail").value.trim();
@@ -725,17 +791,13 @@ h1{color:var(--title)}
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg.textContent="Please enter a valid email address."; $("nlEmail").focus(); return; }
     if(!$("nlConsent").checked){ msg.textContent="Please tick the box to confirm you’d like the newsletter."; return; }
     if(!NEWSLETTER.action){ msg.textContent="The newsletter signup isn’t connected yet. You can begin without signing up."; return; }
-    const f=document.createElement("form");
-    f.method="POST"; f.action=NEWSLETTER.action; f.target="nlFrame"; f.hidden=true;
-    const add=(n,v)=>{ const i=document.createElement("input"); i.type="hidden"; i.name=n; i.value=v; f.append(i); };
-    Object.entries(NEWSLETTER.hidden).forEach(([n,v])=>add(n,v));
-    add(NEWSLETTER.emailField,email);
-    document.body.append(f); f.submit(); f.remove();
+    postNews(email);
     msg.className="nlmsg ok"; msg.textContent="Thank you! Check your inbox to confirm.";
     setTimeout(begin,1200);
   });
   let started=false; try{ started=!!localStorage.getItem(STARTED); }catch(e){}
-  showApp(started||hasContent(cur));
+  if(started||hasContent(cur)) $("skip").textContent="Continue to Scene Builder";
+  showApp(false);
 
   nameEl.value=cur.name||"";
   go(0); renderList();
