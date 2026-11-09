@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Scene Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ECE4E6; --paper:#F7F2F3; --ink:#2B1E28; --soft:#6E5A66; --line:#D3C4CA;
+  --accent:#7C2846; --accent-ink:#FBF1F4; --rope:#9A7A3C; --danger:#A0362A;
+  --display:"Cormorant Garamond", Garamond, Georgia, serif;
+  --sans:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#19121A; --paper:#231A24; --ink:#F0E6EC; --soft:#AD9BA6; --line:#3D2F3C;
+    --accent:#E594B1; --accent-ink:#2A1520; --rope:#D2B270; --danger:#EE8E80; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#19121A; --paper:#231A24; --ink:#F0E6EC; --soft:#AD9BA6; --line:#3D2F3C;
+  --accent:#E594B1; --accent-ink:#2A1520; --rope:#D2B270; --danger:#EE8E80; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:1.05rem;line-height:1.55}
+.wrap{max-width:40rem;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(2.8rem,11vw,4rem);line-height:.95;letter-spacing:-.01em;margin:0 0 .6rem}
+.lede{color:var(--soft);margin:0 0 1.5rem;max-width:30rem}
+.toolbar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+
+button{font-family:var(--sans);font-size:.92rem;border-radius:999px;padding:.5rem 1.05rem;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink)}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.builder{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:1.25rem 1.25rem 1rem;margin-bottom:2.5rem}
+label,.flabel{display:block;font-size:.88rem;color:var(--soft);margin:0 0 .35rem}
+input[type=text],input[type=search],textarea{width:100%;font:inherit;color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line);padding:.35rem 0;outline:none;border-radius:0}
+input:focus,textarea:focus{border-bottom-color:var(--accent)}
+textarea{resize:vertical;line-height:1.6}
+#name{font-family:var(--display);font-size:1.6rem;font-weight:600}
+
+/* the thread: steps of the scene, tied together */
+.mode{display:inline-flex;margin-top:1rem;border:1px solid var(--line);border-radius:999px;padding:2px}
+.mode button{border:0;font-size:.85rem;padding:.35rem .9rem}
+.mode button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.thread{position:relative;display:flex;justify-content:space-between;margin:1.4rem 0 1.2rem;padding:0 .25rem;overflow-x:auto}
+.thread::before{content:"";position:absolute;left:1.2rem;right:1.2rem;top:1.05rem;height:3px;border-radius:2px;
+  background:repeating-linear-gradient(115deg,var(--rope) 0 5px,transparent 5px 7px);opacity:.75}
+.step{position:relative;display:flex;flex-direction:column;align-items:center;gap:.3rem;border:0;padding:0;background:none;min-width:2.4rem;border-radius:8px}
+.dot{display:grid;place-items:center;width:2.15rem;height:2.15rem;border-radius:50%;background:var(--paper);border:2px solid var(--line);font-size:.85rem;font-weight:600;color:var(--soft)}
+.step.filled .dot{border-color:var(--rope);color:var(--ink)}
+.step.on .dot{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.step small{font-size:.72rem;color:var(--soft);white-space:nowrap}
+.step.on small{color:var(--ink);font-weight:600}
+@media (max-width:34rem){ .step small{display:none} .step.on small{display:block;position:absolute;top:2.5rem} .thread{padding-bottom:1.2rem} }
+
+.stage h2{font-family:var(--display);font-weight:600;font-size:2rem;line-height:1.1;margin:.6rem 0 .3rem}
+.sofar{border-left:3px solid var(--rope);padding:.2rem 0 .2rem .9rem;margin:0 0 1.2rem}
+.sofar summary{cursor:pointer;font-size:.88rem;font-weight:600;color:var(--ink)}
+.sofar dl{margin:.5rem 0 0;display:grid;gap:.45rem}
+.sofar dt{font-size:.78rem;color:var(--soft)}
+.sofar dd{margin:0;font-size:.92rem;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sofar button.link{all:unset;cursor:pointer;display:block;border-radius:4px}
+.sofar button.link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ref{margin:0 0 .5rem;padding:.6rem .8rem;border-radius:10px;background:color-mix(in srgb,var(--rope) 12%,transparent);white-space:pre-wrap;font-size:.95rem}
+.fieldgroup{margin-top:1.6rem}
+.note button{margin-top:.5rem}
+.finish{border-top:1px solid var(--line);padding-top:.9rem;margin-top:.5rem}
+.check{display:flex;gap:.5rem;align-items:flex-start;color:var(--ink);font-size:.92rem;cursor:pointer}
+.check input{margin-top:.25rem;accent-color:var(--accent)}
+.hint{font-size:.82rem;color:var(--soft);margin:.4rem 0 0}
+.method{font-size:.88rem;color:var(--soft);margin:0 0 1.3rem;font-style:italic}
+.field{margin-bottom:1.25rem}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chips button{font-size:.88rem;padding:.35rem .8rem}
+.chips .rm{margin-left:-.55rem;padding:.35rem .55rem;border-color:transparent;color:var(--soft)}
+.addown{display:flex;gap:.5rem;align-items:center;margin-top:.5rem;max-width:20rem}
+.addown input{font-size:.92rem}
+.addown button{font-size:.85rem;padding:.3rem .8rem;flex:none}
+.chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.nav{display:flex;align-items:center;gap:.5rem;border-top:1px solid var(--line);padding-top:.9rem;margin-top:.5rem}
+.status{font-size:.85rem;color:var(--soft);margin-right:auto}
+
+.listhead{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.5rem}
+.listhead h2{font-family:var(--display);font-weight:600;font-size:2rem;margin:0}
+.search{margin-bottom:1rem}
+ul.scenes{list-style:none;margin:0;padding:0}
+.scene{padding:1rem 0;border-top:1px solid var(--line)}
+.scene h3{font-family:var(--display);font-weight:600;font-size:1.4rem;margin:0;line-height:1.2}
+.scene .meta{font-size:.85rem;color:var(--soft);margin:.15rem 0 .5rem}
+.scene .feel{margin:0 0 .5rem;font-style:italic}
+.acts{display:flex;gap:.4rem;flex-wrap:wrap}
+.acts button{font-size:.82rem;padding:.3rem .8rem}
+.acts .del{color:var(--danger)}
+.empty{color:var(--soft);font-style:italic;padding:1rem 0}
+
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.88rem;color:var(--soft)}
+footer .acts{margin-top:.6rem}
+
+#print{display:none}
+@media print{
+  body{background:#fff;color:#000;font-size:11pt}
+  .wrap{display:none}
+  #print{display:block;font-family:Georgia,serif;color:#000}
+  #print h1{font-family:var(--display);font-size:28pt;margin:0 0 4pt}
+  #print .sub{margin:0 0 14pt;color:#444}
+  #print h2{font-family:var(--display);font-size:17pt;margin:16pt 0 2pt;break-after:avoid}
+  #print .m{font-style:italic;color:#555;margin:0 0 8pt;font-size:9.5pt}
+  #print .pf{margin:0 0 10pt;break-inside:avoid}
+  #print .pl{font-weight:bold;font-size:10pt;margin-bottom:3pt}
+  #print .ln{border-bottom:1px solid #999;height:20pt}
+  #print .ans{white-space:pre-wrap;margin:0}
+  #print .box{display:inline-block;margin:0 12pt 4pt 0}
+  @page{margin:16mm 16mm 18mm}
+  #print .sum{font-family:Georgia,"Times New Roman",serif;font-size:10.5pt;line-height:1.5;color:#2B1E28;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #print .sum h1{font-family:"Cormorant Garamond",Garamond,Georgia,serif;font-weight:600;font-size:30pt;line-height:1;margin:0 0 4pt;color:#2B1E28}
+  #print .sum .sub{font-family:Figtree,Helvetica,Arial,sans-serif;font-size:8.5pt;color:#6E5A66;margin:0 0 14pt;padding-bottom:10pt;border-bottom:2px solid #9A7A3C}
+  #print .sum h2{font-family:"Cormorant Garamond",Garamond,Georgia,serif;font-weight:600;font-size:16pt;color:#7C2846;margin:14pt 0 4pt;break-after:avoid}
+  #print .sum section{break-inside:avoid}
+  #print .sum .big{font-family:"Cormorant Garamond",Garamond,Georgia,serif;font-size:19pt;font-style:italic;margin:0 0 3pt;line-height:1.2}
+  #print .sum p{margin:0 0 5pt;white-space:pre-wrap}
+  #print .sum .tags{font-family:Figtree,Helvetica,Arial,sans-serif;font-size:9pt;color:#6E5A66}
+  #print .sum dl{display:grid;grid-template-columns:30% 1fr;gap:4pt 12pt;margin:0}
+  #print .sum dt{font-family:Figtree,Helvetica,Arial,sans-serif;font-size:8.5pt;color:#6E5A66;padding-top:1.5pt}
+  #print .sum dd{margin:0;white-space:pre-wrap}
+  #print .sum ol.arc{list-style:none;margin:0;padding:0 0 0 12pt;border-left:2px solid #9A7A3C}
+  #print .sum ol.arc li{margin:0 0 6pt}
+  #print .sum ol.arc b{display:block;font-family:Figtree,Helvetica,Arial,sans-serif;font-weight:600;font-size:8.5pt;color:#7C2846}
+  #print .sum blockquote{margin:0;padding:6pt 10pt;background:#F3ECEE;border-radius:6pt;font-style:italic;white-space:pre-wrap}
+  #print .sum .private{margin-top:16pt;padding-top:8pt;border-top:1px dashed #9A7A3C}
+  #print .sum footer{margin-top:18pt;font-family:Figtree,Helvetica,Arial,sans-serif;font-size:8pt;color:#6E5A66}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>Scene Builder</h1>
+  <p class="lede">From a private fantasy to a scene you can actually play, one step at a time.</p>
+  <div class="toolbar">
+    <button type="button" id="new">New scene</button>
+    <button type="button" id="printBlank">Print blank worksheet</button>
+  </div>
+
+  <section class="builder" aria-label="Scene in progress">
+    <label for="name">Scene name</label>
+    <input type="text" id="name" maxlength="100" placeholder="Untitled scene" autocomplete="off">
+    <div class="mode" role="group" aria-label="Version">
+      <button type="button" id="modeFull">Full, 8 steps</button>
+      <button type="button" id="modeQuick">Quick, 4 steps</button>
+    </div>
+    <nav class="thread" id="thread" aria-label="Steps"></nav>
+    <details class="sofar" id="sofar" open><summary>Your scene so far</summary><dl id="sofarList"></dl></details>
+    <div class="stage" id="stage"></div>
+    <div class="finish" id="finish" hidden>
+      <label class="check"><input type="checkbox" id="incPrivate"> Include my private fantasy version and parts notes</label>
+      <p class="hint">Opens a one-page summary in your print dialog. Choose “Save as PDF” to download it.</p>
+    </div>
+    <div class="nav">
+      <span class="status" id="status" aria-live="polite"></span>
+      <button type="button" id="back">Back</button>
+      <button type="button" class="primary" id="next">Next</button>
+    </div>
+  </section>
+
+  <section aria-label="Your scenes">
+    <div class="listhead"><h2>Your scenes</h2></div>
+    <div class="search"><label for="q">Search</label><input type="search" id="q" placeholder="A word, a feeling, a place…"></div>
+    <ul class="scenes" id="list"></ul>
+  </section>
+
+  <footer>
+    <p>Everything you write stays in this browser on this device. Nothing is uploaded, and the page isn’t listed in search engines. Anyone using this browser can open it, so mind shared devices. Download a backup now and then, and use it to move your scenes to another device.</p>
+    <div class="acts">
+      <button type="button" id="export">Download backup</button>
+      <button type="button" id="importBtn">Restore from backup</button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </div>
+  </footer>
+</main>
+<div id="print" aria-hidden="true"></div>
+
+<script>
+(function(){
+  // the longing(s) chosen in step 1, phrased to fit "feel ___"
+  const PHRASE={"Let go":"able to let go"};
+  const phrase=v=>PHRASE[v]||v.toLowerCase();
+  function target(s){
+    if(!s) return null;
+    const f=s.a.feel||[]; if(!f.length) return null;
+    const join=(p,w)=>p.length===1?p[0]:p.slice(0,-1).join(", ")+` ${w} `+p[p.length-1];
+    const foc=[].concat(s.a.focus||[]).filter(v=>f.includes(v));
+    return foc.length ? join(foc.map(phrase),"and") : join(f.map(phrase),"or");
+  }
+  const val=(x,s)=>typeof x==="function"?x(s):x;
+  const filled=v=>Array.isArray(v)?v.length>0:!!(v&&String(v).trim());
+  const FANT=[{id:"setting",name:"Where and when"},{id:"roles",name:"Who’s there, and who you are"},{id:"story",name:"What happens"},{id:"senses",name:"Words, sounds, textures, smells"}];
+
+  const STAGES=[
+    {name:"Heart", title:"What is this scene for?",
+     method:"Every scene starts with why. The feeling it’s for matters more than the acts in it, and it guides every step that follows.",
+     fields:[
+      {id:"feel",type:"chips",label:"Feelings that pull at you",options:["Wanted","Seen","Held","Adored","Powerful","Surrendered","Playful","Free","Safe","Wild","Taken care of","Let go"]},
+      {id:"longing",type:"area",rows:3,label:"With my partner I long to feel…"}
+     ]},
+    {name:"Spark", title:"Find the spark",
+     method:s=>{ const t=target(s); return t
+       ? `Following your longing to feel ${t}. Adapted from Jack Morin’s peak erotic experience exercise (The Erotic Mind).`
+       : "Adapted from Jack Morin’s peak erotic experience exercise (The Erotic Mind). Choose feelings in step 1 and these questions will follow them."; },
+     fields:[
+      {id:"focus",type:"chips",noOwn:true,show:s=>(s.a.feel||[]).length>1,
+       label:"Which longings do you want to follow here? Pick one or more.",options:s=>(s&&s.a.feel)||[]},
+      {id:"peak",type:"area",rows:5,label:s=>{ const t=target(s); return t
+        ? `Recall a moment, lived or imagined, when you felt ${t}. What happened?`
+        : "Recall a moment, lived or imagined, that was intensely hot. What happened?"; }},
+      {id:"peakWhy",type:"area",rows:3,label:s=>{ const t=target(s); return t
+        ? `What exactly made you feel ${t} there? Name the moment it peaked.`
+        : "What made it so charged? Name the exact moment it peaked."; }},
+      {id:"stronger",type:"area",rows:3,label:s=>{ const t=target(s); return t
+        ? `If feeling ${t} grew even stronger, what would happen next?`
+        : "If it grew even stronger, what would happen next?"; }},
+      {id:"body",type:"area",rows:2,label:s=>{ const t=target(s); return t
+        ? `Where in your body do you notice feeling ${t}, even now as you write?`
+        : "Where in your body do you notice it, even now as you write?"; }}
+     ]},
+    {name:"Charge", title:"What gives it charge?",
+     method:"Looking at your spark: what makes it hot? Based on Morin’s four cornerstones of eroticism, and the seven fantasy themes Justin Lehmiller found most common in his survey of over 4,000 people (Tell Me What You Want).",
+     fields:[
+      {id:"corner",type:"chips",label:"Which of these is alive in your spark?",options:["Longing and anticipation","Breaking a rule","Power","Overcoming hesitation"]},
+      {id:"lehm",type:"chips",label:"Any of these themes?",options:["More than two people","Power, control, roughness","Novelty and adventure","Taboo and forbidden","Sharing a partner","Passion and romance","Playing with gender or orientation"]},
+      {id:"tension",type:"area",rows:3,label:"Attraction plus an obstacle creates excitement. What’s the tension or obstacle here?"}
+     ]},
+    {name:"Fantasy", title:"Write the fantasy version",
+     method:"Now turn the spark into a scene, the way it plays in your head, with nothing held back. This version is only for you, and a fantasy is not a request. In step 6 you’ll shape it into a scene you can actually play.",
+     fields:[
+      {id:"setting",type:"text",label:"Where and when"},
+      {id:"roles",type:"text",label:"Who’s there, and who are you in it"},
+      {id:"story",type:"area",rows:8,label:"What happens, from beginning to end"},
+      {id:"senses",type:"area",rows:3,label:"Words, sounds, textures, smells"}
+     ]},
+    {name:"Parts", title:"Check in with your parts",
+     method:"Before shaping the real scene, notice how you feel about your fantasy version. Based on parts work (IFS). The last two questions come from Emily Nagoski’s dual control model (Come as You Are): arousal works like a car, with an accelerator that responds to what turns you on and brakes that respond to what turns you off.",
+     fields:[
+      {id:"partWants",type:"area",rows:3,label:"Which part of you wants this, and what does it hope to feel?"},
+      {id:"partWorried",type:"area",rows:3,label:"Is any part hesitant, critical or protective? What does it need?"},
+      {id:"accel",type:"area",rows:2,label:"What makes this more exciting for you? For example a setting, a mood, certain words, how your partner looks at you, how you feel about yourself."},
+      {id:"brakes",type:"area",rows:2,label:"What makes the excitement drop or switch off? For example stress, worry about being judged, distractions, something that feels off."}
+     ]},
+    {name:"Real scene", title:"Shape the real scene",
+     method:"Go through your fantasy version piece by piece. Keep what you’d really play, change what needs changing, and leave the rest in your imagination. Keep the feeling, not necessarily the literal act. Then outline the scene you’d actually play.",
+     fields:[
+      {id:"needFantasy",type:"note",show:s=>!FANT.some(e=>filled(s.a[e.id])),
+       label:"Write your fantasy version in step 4 first, then come back here to shape it.",go:3},
+      ...FANT.flatMap(e=>[
+        {id:"ref_"+e.id,type:"ref",src:e.id,show:s=>filled(s.a[e.id]),label:e.name},
+        {id:"pl_"+e.id,type:"choice",noOwn:true,show:s=>filled(s.a[e.id]),label:"In the real scene, I’d…",printLabel:`${e.name}: in the real scene, I’d…`,
+         options:["Keep it","Change it","Leave it in the fantasy"]},
+        {id:"pc_"+e.id,type:"area",rows:2,show:s=>filled(s.a[e.id])&&s.a["pl_"+e.id]==="Change it",label:"How it looks in the real scene",blankSkip:true}
+      ]),
+      {id:"sc_begin",type:"area",rows:2,label:"The real scene: how it begins"},
+      {id:"sc_build",type:"area",rows:3,label:"How it builds"},
+      {id:"sc_peak",type:"area",rows:2,label:"The peak"},
+      {id:"sc_land",type:"area",rows:2,label:"How it ends and lands"},
+      {id:"first",type:"area",rows:2,label:"The smallest version I could try first"}
+     ]},
+    {name:"Agreements", title:"Agree on the frame",
+     method:"What your real scene needs to feel safe to play. Who it’s for and who’s doing, from Betty Martin’s Wheel of Consent, plus the basics of scene negotiation.",
+     fields:[
+      {id:"wheel",type:"choice",label:"In this scene I mainly want to…",options:["Take: I do, it’s for me","Serve: I do, it’s for you","Accept: you do, it’s for me","Allow: you do, it’s for you","It shifts during the scene"]},
+      {id:"limits",type:"area",rows:2,label:"Hard limits, and maybes that need care"},
+      {id:"signals",type:"text",label:"Stop and slow-down signals"},
+      {id:"checkins",type:"text",label:"How and when we check in"},
+      {id:"aftercare",type:"area",rows:2,label:"Aftercare I’d like, and can offer"}
+     ]},
+    {name:"Share", title:"Bring it to your partner",
+     method:"Your scene is ready to share. Reveal it in layers: the feeling first, details when it feels safe on both sides.",
+     fields:[
+      {id:"opener",type:"area",rows:4,label:"Your opener",placeholder:"Lately I’ve been imagining… What draws me is feeling… I’d love to try a small version, like… And it’s completely fine if…"},
+      {id:"when",type:"text",label:"When and where to talk about it"},
+      {id:"hear",type:"text",label:"What I’d like to hear back"}
+     ]}
+  ];
+
+  // quick version: four short steps, same answers underneath
+  const FIELD=id=>STAGES.flatMap(st=>st.fields).find(f=>f.id===id);
+  const QUICK=[
+    {name:"Heart", title:"What is this scene for?", method:"Quick version. Pick the feelings this scene is for.",
+     fields:[FIELD("feel")]},
+    {name:"Fantasy", title:"The fantasy, in a few lines", method:"No need to polish it. Just get it down.",
+     fields:[{...FIELD("story"),rows:5,label:"What happens in your fantasy?"}]},
+    {name:"Real scene", title:"What could you actually try?", method:"Keep the feeling, keep it small.",
+     fields:[{...FIELD("first"),rows:3,label:"A small version you could try soon"}]},
+    {name:"Frame", title:"The bare minimum", method:"Enough to play safely.",
+     fields:[FIELD("signals"),FIELD("aftercare")]}
+  ];
+  const stepsFor=sc=>sc&&sc.quick?QUICK:STAGES;
+
+  const KEY="scenes.v1", CUR="scenes.current";
+  const $=id=>document.getElementById(id);
+  const nameEl=$("name"), thread=$("thread"), stageEl=$("stage"), statusEl=$("status"),
+        backBtn=$("back"), nextBtn=$("next"), list=$("list"), q=$("q"), printEl=$("print");
+
+  const newId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  const blank=()=>({id:newId(),name:"",a:{},created:Date.now(),updated:Date.now()});
+  function load(){ try{ const v=JSON.parse(localStorage.getItem(KEY)); return Array.isArray(v)?v:[]; }catch(e){ return []; } }
+  let scenes=load(), cur=null, stage=0;
+  try{ const id=localStorage.getItem(CUR); cur=scenes.find(s=>s.id===id)||null; }catch(e){}
+  if(!cur) cur=blank();
+
+  function flash(msg){ statusEl.textContent=msg; clearTimeout(flash.t); flash.t=setTimeout(()=>statusEl.textContent="",3000); }
+  const stageFilled=(s,i)=>stepsFor(s)[i].fields.some(f=>filled(s.a[f.id]));
+  const hasContent=s=>filled(s.name)||Object.values(s.a).some(filled);
+
+  function persist(){
+    try{ localStorage.setItem(KEY,JSON.stringify(scenes)); localStorage.setItem(CUR,cur.id); return true; }
+    catch(e){ flash("Couldn’t save in this browser. Download a backup to keep this scene."); return false; }
+  }
+  function commit(){
+    if(!hasContent(cur)) return;
+    cur.updated=Date.now();
+    if(!scenes.includes(cur)) scenes.push(cur);
+    if(persist()) flash("Saved");
+    renderThread(); renderList();
+  }
+
+  function renderThread(){
+    thread.innerHTML="";
+    stepsFor(cur).forEach((s,i)=>{
+      const b=document.createElement("button"); b.type="button";
+      b.className="step"+(i===stage?" on":"")+(stageFilled(cur,i)?" filled":"");
+      if(i===stage) b.setAttribute("aria-current","step");
+      b.setAttribute("aria-label",`Step ${i+1}: ${s.name}`);
+      const d=document.createElement("span"); d.className="dot"; d.textContent=i+1;
+      const l=document.createElement("small"); l.textContent=s.name;
+      b.append(d,l); b.onclick=()=>go(i); thread.append(b);
+    });
+  }
+
+  const clip=(t,n)=>{ t=String(t||"").replace(/\s+/g," ").trim(); return t.length>n?t.slice(0,n-1)+"…":t; };
+  const list2=(...v)=>v.flat().filter(filled).join(", ");
+  function sceneRows(s){
+    const a=s.a, rows=[];
+    const add=(step,label,text)=>{ if(filled(text)) rows.push({step,label,text}); };
+    add(0,"It’s for feeling",list2(target(s)||[],a.longing?clip(a.longing,90):[]));
+    add(1,"The spark",clip(a.peak,140));
+    add(2,"The charge",list2(a.corner||[],a.lehm||[],a.tension?clip(a.tension,80):[]));
+    add(3,"The fantasy",list2(a.setting||[],a.roles||[],a.story?clip(a.story,120):[]));
+    add(5,"The real scene",[a.sc_begin,a.sc_build,a.sc_peak,a.sc_land].filter(filled).map(t=>clip(t,60)).join(" → "));
+    add(6,"The frame",list2(a.wheel||[],a.signals?"signals: "+clip(a.signals,40):[]));
+    return rows;
+  }
+  function renderSofar(){
+    const box=$("sofar"), dl=$("sofarList"); dl.innerHTML="";
+    const rows=sceneRows(cur).filter(r=>r.step<stage);
+    box.hidden=!rows.length||!!cur.quick;
+    rows.forEach(r=>{
+      const b=document.createElement("button"); b.type="button"; b.className="link"; b.title="Go to step "+(r.step+1);
+      const dt=document.createElement("dt"); dt.textContent=r.label;
+      const dd=document.createElement("dd"); dd.textContent=r.text;
+      b.append(dt,dd); b.onclick=()=>go(r.step); dl.append(b);
+    });
+  }
+  function renderStage(){
+    renderSofar();
+    const s=stepsFor(cur)[stage]; stageEl.innerHTML="";
+    const h=document.createElement("h2"); h.textContent=val(s.title,cur);
+    const m=document.createElement("p"); m.className="method"; m.textContent=val(s.method,cur);
+    stageEl.append(h,m);
+    s.fields.forEach(f=>{
+      if(f.show&&!f.show(cur)) return;
+      const label=val(f.label,cur), options=val(f.options,cur)||[];
+      const wrap=document.createElement("div"); wrap.className="field";
+      if(f.id==="sc_begin") wrap.className="field fieldgroup";
+      const fid="f_"+f.id;
+      if(f.type==="note"){
+        const p=document.createElement("p"); p.className="note"; p.textContent=label;
+        const b=document.createElement("button"); b.type="button"; b.textContent="Go to step "+(f.go+1); b.onclick=()=>go(f.go);
+        wrap.className="field note"; wrap.append(p,b); stageEl.append(wrap); return;
+      }
+      if(f.type==="ref"){
+        wrap.className="field fieldgroup";
+        const lab=document.createElement("span"); lab.className="flabel"; lab.textContent="From your fantasy: "+label.toLowerCase();
+        const q=document.createElement("p"); q.className="ref"; q.textContent=cur.a[f.src];
+        wrap.append(lab,q); stageEl.append(wrap); return;
+      }
+      if(f.type==="chips"||f.type==="choice"){
+        const lab=document.createElement("span"); lab.className="flabel"; lab.id=fid+"_l"; lab.textContent=label;
+        const box=document.createElement("div"); box.className="chips"; box.setAttribute("role","group"); box.setAttribute("aria-labelledby",lab.id);
+        cur.x=cur.x||{};
+        const own=cur.x[f.id]||[];
+        const select=o=>{
+          if(f.type==="chips"){
+            const arr=new Set(cur.a[f.id]||[]); arr.has(o)?arr.delete(o):arr.add(o); cur.a[f.id]=[...arr];
+          }else{ cur.a[f.id]= cur.a[f.id]===o ? "" : o; }
+        };
+        const isOn=o=>f.type==="chips" ? (cur.a[f.id]||[]).includes(o) : cur.a[f.id]===o;
+        [...options,...own].forEach(o=>{
+          const b=document.createElement("button"); b.type="button"; b.textContent=o;
+          b.setAttribute("aria-pressed",isOn(o)?"true":"false");
+          b.onclick=()=>{ select(o); renderStage(); commit(); };
+          box.append(b);
+          if(own.includes(o)){
+            const r=document.createElement("button"); r.type="button"; r.className="rm"; r.textContent="×";
+            r.setAttribute("aria-label",`Remove “${o}”`);
+            r.onclick=()=>{
+              cur.x[f.id]=own.filter(v=>v!==o);
+              if(f.type==="chips") cur.a[f.id]=(cur.a[f.id]||[]).filter(v=>v!==o);
+              else if(cur.a[f.id]===o) cur.a[f.id]="";
+              renderStage(); commit();
+            };
+            box.append(r);
+          }
+        });
+        const add=document.createElement("div"); add.className="addown";
+        const inp=document.createElement("input"); inp.type="text"; inp.maxLength=60; inp.id="own_"+f.id;
+        inp.placeholder="Add your own"; inp.setAttribute("aria-label",`Add your own: ${f.label}`);
+        const ab=document.createElement("button"); ab.type="button"; ab.textContent="Add";
+        const doAdd=()=>{
+          const v=inp.value.trim(); if(!v) return;
+          const exists=[...options,...own].find(o=>o.toLowerCase()===v.toLowerCase());
+          const val=exists||v;
+          if(!exists) cur.x[f.id]=[...own,v];
+          if(!isOn(val)) select(val);
+          renderStage(); commit();
+          const again=$("own_"+f.id); if(again) again.focus();
+        };
+        ab.onclick=doAdd;
+        inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); doAdd(); } });
+        add.append(inp,ab);
+        if(f.noOwn) wrap.append(lab,box); else wrap.append(lab,box,add);
+      }else{
+        const lab=document.createElement("label"); lab.htmlFor=fid; lab.textContent=label;
+        const el=f.type==="area"?document.createElement("textarea"):document.createElement("input");
+        if(f.type==="area") el.rows=f.rows||4; else el.type="text";
+        el.id=fid; el.value=cur.a[f.id]||""; if(f.placeholder) el.placeholder=f.placeholder;
+        el.addEventListener("input",()=>{ cur.a[f.id]=el.value; commit(); });
+        wrap.append(lab,el);
+      }
+      stageEl.append(wrap);
+    });
+    backBtn.disabled=stage===0; backBtn.style.visibility=stage===0?"hidden":"visible";
+    const last=stage===stepsFor(cur).length-1;
+    nextBtn.textContent=last?"Download summary":"Next";
+    $("finish").hidden=!last; $("incPrivate").checked=!!cur.incPrivate;
+  }
+
+  function go(i){ stage=Math.max(0,Math.min(stepsFor(cur).length-1,i)); renderMode(); renderThread(); renderStage(); }
+  backBtn.onclick=()=>go(stage-1);
+  nextBtn.onclick=()=>{
+    if(stage<stepsFor(cur).length-1){ go(stage+1); $("thread").scrollIntoView({behavior:"smooth",block:"start"}); }
+    else{ commit(); if(hasContent(cur)) printSummary(cur); else flash("Write something first"); }
+  };
+  nameEl.addEventListener("input",()=>{ cur.name=nameEl.value; commit(); });
+  function renderMode(){
+    $("modeFull").setAttribute("aria-pressed",cur.quick?"false":"true");
+    $("modeQuick").setAttribute("aria-pressed",cur.quick?"true":"false");
+  }
+  const setMode=q=>{ if(!!cur.quick===q) return; cur.quick=q; commit(); go(0); renderList(); };
+  $("modeFull").onclick=()=>setMode(false);
+  $("modeQuick").onclick=()=>setMode(true);
+  $("incPrivate").addEventListener("change",e=>{ cur.incPrivate=e.target.checked; commit(); });
+
+  function openScene(s){
+    cur=s; nameEl.value=s.name||"";
+    const firstEmpty=stepsFor(s).findIndex((_,i)=>!stageFilled(s,i));
+    try{ localStorage.setItem(CUR,s.id); }catch(e){}
+    go(firstEmpty<0?0:firstEmpty);
+    document.querySelector(".builder").scrollIntoView({behavior:"smooth"});
+  }
+  $("new").onclick=()=>{ cur=blank(); nameEl.value=""; try{ localStorage.removeItem(CUR); }catch(e){} go(0); nameEl.focus(); renderList(); };
+
+  function fmt(t){ return new Date(t).toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"}); }
+  function renderList(){
+    const term=q.value.trim().toLowerCase();
+    const text=s=>(s.name+" "+Object.values(s.a).map(v=>Array.isArray(v)?v.join(" "):v).join(" ")).toLowerCase();
+    const items=scenes.filter(s=>!term||text(s).includes(term)).sort((a,b)=>b.updated-a.updated);
+    list.innerHTML="";
+    if(!items.length){
+      const li=document.createElement("li"); li.className="empty";
+      li.textContent=scenes.length?"No scenes match that search.":"Your scenes appear here as soon as you start writing.";
+      list.append(li); return;
+    }
+    items.forEach(s=>{
+      const li=document.createElement("li"); li.className="scene";
+      const h=document.createElement("h3"); h.textContent=s.name||"Untitled scene";
+      const done=stepsFor(s).filter((_,i)=>stageFilled(s,i)).length;
+      const meta=document.createElement("p"); meta.className="meta";
+      meta.textContent=`Edited ${fmt(s.updated)}, ${done} of ${stepsFor(s).length} steps filled`+(s.quick?", quick version":"")+(s===cur?", open now":"");
+      li.append(h,meta);
+      if((s.a.feel||[]).length){ const p=document.createElement("p"); p.className="feel"; p.textContent=s.a.feel.join(", "); li.append(p); }
+      const acts=document.createElement("div"); acts.className="acts";
+      const o=document.createElement("button"); o.type="button"; o.textContent="Open"; o.onclick=()=>openScene(s);
+      const p=document.createElement("button"); p.type="button"; p.textContent="Print all answers"; p.onclick=()=>printScene(s);
+      const sm=document.createElement("button"); sm.type="button"; sm.textContent="Download summary"; sm.onclick=()=>printSummary(s);
+      const d=document.createElement("button"); d.type="button"; d.className="del"; d.textContent="Delete";
+      d.onclick=()=>{
+        if(!confirm("Delete this scene? This can’t be undone.")) return;
+        scenes=scenes.filter(x=>x!==s);
+        if(s===cur){ cur=blank(); nameEl.value=""; go(0); }
+        persist(); renderList(); flash("Scene deleted");
+      };
+      acts.append(o,sm,p,d); li.append(acts); list.append(li);
+    });
+  }
+  q.addEventListener("input",renderList);
+
+  // printing: a filled scene, or a blank worksheet for writing by hand
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  function printScene(s){
+    let h=`<h1>${esc(s&&s.name?s.name:"Scene Builder")}</h1>`;
+    h+= s ? `<p class="sub">Printed ${esc(fmt(Date.now()))}</p>` : `<p class="sub">Scene name: ________________________________</p>`;
+    stepsFor(s).forEach((st,i)=>{
+      h+=`<h2>${i+1}. ${esc(val(st.title,s))}</h2><p class="m">${esc(val(st.method,s))}</p>`;
+      st.fields.forEach(f=>{
+        if(f.type==="note") return;
+        if(f.type==="ref"){ if(s&&filled(s.a[f.src])) h+=`<div class="pf"><div class="pl">From the fantasy: ${esc(f.label)}</div><p class="ans">${esc(s.a[f.src])}</p></div>`; return; }
+        if(f.show&&s&&!f.show(s)) return;
+        if(!s&&f.blankSkip) return;
+        h+=`<div class="pf"><div class="pl">${esc(!s&&f.printLabel?f.printLabel:val(f.label,s))}</div>`;
+        const v=s?s.a[f.id]:null;
+        if(s){
+          const out=Array.isArray(v)?v.join(", "):(v||"");
+          h+= out.trim()?`<p class="ans">${esc(out)}</p>`:`<div class="ln"></div>`;
+        }else if(f.options){
+          h+=val(f.options,s).map(o=>`<span class="box">☐ ${esc(o)}</span>`).join("")+`<span class="box">☐ ____________</span><span class="box">☐ ____________</span>`;
+        }else{
+          const n=f.type==="area"?Math.max(2,f.rows||4):1;
+          h+=`<div class="ln"></div>`.repeat(n);
+        }
+        h+=`</div>`;
+      });
+    });
+    printEl.innerHTML=h; window.print();
+  }
+  $("printBlank").onclick=()=>printScene(null);
+
+  function printSummary(sc){
+    const a=sc.a, E=esc, F=v=>filled(v);
+    const join=v=>[].concat(v||[]).filter(F).join(", ");
+    const sec=(title,body)=>body.trim()?`<section><h2>${E(title)}</h2>${body}</section>`:"";
+    const para=v=>F(v)?`<p>${E(v)}</p>`:"";
+    const dl=rows=>{ const r=rows.filter(([,v])=>F(v)); return r.length?`<dl>${r.map(([k,v])=>`<dt>${E(k)}</dt><dd>${E(v)}</dd>`).join("")}</dl>`:""; };
+    let h=`<div class="sum"><h1>${E(sc.name||"My scene")}</h1><p class="sub">Scene Builder summary, ${E(fmt(Date.now()))}</p>`;
+
+    const feels=(a.feel||[]).map(phrase);
+    h+=sec("What it’s for",
+      (feels.length?`<p class="big">Feeling ${E(feels.length>1?feels.slice(0,-1).join(", ")+" and "+feels.at(-1):feels[0])}</p>`:"")+para(a.longing));
+    h+=sec("The spark",para(a.peak)+para(a.peakWhy)+para(a.stronger));
+    h+=sec("What gives it charge",
+      (F(join([a.corner,a.lehm]))?`<p class="tags">${E(join([...(a.corner||[]),...(a.lehm||[])]))}</p>`:"")+para(a.tension));
+
+    const arc=[["How it begins",a.sc_begin],["How it builds",a.sc_build],["The peak",a.sc_peak],["How it ends and lands",a.sc_land]].filter(([,v])=>F(v));
+    const kept=FANT.filter(e=>F(a[e.id])&&a["pl_"+e.id]==="Keep it").map(e=>[e.name,a[e.id]]);
+    const changed=FANT.filter(e=>F(a[e.id])&&a["pl_"+e.id]==="Change it").map(e=>[e.name,a["pc_"+e.id]||"(to be worked out)"]);
+    h+=sec("The real scene",
+      (arc.length?`<ol class="arc">${arc.map(([k,v])=>`<li><b>${E(k)}</b>${E(v)}</li>`).join("")}</ol>`:"")+
+      (kept.length||changed.length?`<p class="tags" style="margin-top:8pt">From the fantasy</p>`+dl([...kept,...changed]):"")+
+      (F(a.first)?`<p class="tags" style="margin-top:8pt">The smallest version to try first</p>${para(a.first)}`:""));
+
+    h+=sec("The frame",dl([["Who it’s for, who’s doing",a.wheel],["Limits and maybes",a.limits],["Stop and slow-down signals",a.signals],["Check-ins",a.checkins],["Aftercare",a.aftercare]]));
+    h+=sec("Bringing it to my partner",
+      (F(a.opener)?`<blockquote>${E(a.opener)}</blockquote>`:"")+dl([["When and where",a.when],["What I’d like to hear back",a.hear]]));
+
+    if(sc.incPrivate){
+      const priv=sec("The fantasy version",dl(FANT.map(e=>[e.name,a[e.id]])))+
+        sec("My parts",dl([["The part that wants this",a.partWants],["Hesitant or protective parts",a.partWorried],["More exciting with",a.accel],["Excitement drops with",a.brakes]]));
+      if(priv) h+=`<div class="private">${priv}</div>`;
+    }
+    h+=`<footer>A fantasy is not a request. Any part of this can change, and every yes can become a no.</footer></div>`;
+    printEl.innerHTML=h; window.print();
+  }
+
+  // backup
+  const today=()=>{ const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+  $("export").onclick=()=>{
+    const blob=new Blob([JSON.stringify({app:"scenes",version:1,exported:new Date().toISOString(),scenes},null,2)],{type:"application/json"});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`scenes-${today()}.json`;
+    document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  };
+  $("importBtn").onclick=()=>$("importFile").click();
+  $("importFile").addEventListener("change",async ev=>{
+    const f=ev.target.files[0]; if(!f) return;
+    try{
+      const data=JSON.parse(await f.text());
+      const incoming=(Array.isArray(data)?data:data.scenes||[]).filter(s=>s&&s.id&&s.a&&typeof s.a==="object");
+      const known=new Set(scenes.map(s=>s.id)); let added=0;
+      incoming.forEach(s=>{ if(!known.has(s.id)){ scenes.push({id:s.id,name:s.name||"",a:s.a,x:s.x||{},quick:!!s.quick,incPrivate:!!s.incPrivate,created:s.created||Date.now(),updated:s.updated||Date.now()}); added++; } });
+      persist(); renderList(); flash(`Restored ${added} ${added===1?"scene":"scenes"}`);
+    }catch(e){ flash("That file isn’t a scenes backup"); }
+    ev.target.value="";
+  });
+
+  nameEl.value=cur.name||"";
+  go(0); renderList();
+})();
+</script>
+</body>
+</html>
