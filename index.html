@@ -754,14 +754,30 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
   });
 
   // ---- welcome slide and newsletter ----
-  function postNews(email){
-    const f=document.createElement("form");
-    f.method="POST"; f.action=NEWSLETTER.action; f.target="nlFrame"; f.hidden=true;
-    const add=(n,v)=>{ const i=document.createElement("input"); i.type="hidden"; i.name=n; i.value=v; f.append(i); };
-    Object.entries(NEWSLETTER.hidden).forEach(([n,v])=>add(n,v));
-    add(NEWSLETTER.emailField,email);
-    document.body.append(f); f.submit(); f.remove();
+  // Sends the signup to Kit and reports back: "ok", "error" (Kit said no) or "unknown" (couldn't tell).
+  async function postNews(email){
+    const body=new FormData();
+    Object.entries(NEWSLETTER.hidden).forEach(([n,v])=>body.append(n,v));
+    body.append(NEWSLETTER.emailField,email);
+    try{
+      const r=await fetch(NEWSLETTER.action,{method:"POST",body,headers:{Accept:"application/json"}});
+      let data=null; try{ data=await r.json(); }catch(e){}
+      if(r.ok && (!data || data.status==="success" || data.subscription)) return {result:"ok"};
+      return {result:"error", detail:(data&&(data.errors||data.error||data.message))||("HTTP "+r.status)};
+    }catch(err){
+      // the browser blocked the direct request: fall back to a plain form post into a hidden frame
+      try{
+        const f=document.createElement("form");
+        f.method="POST"; f.action=NEWSLETTER.action; f.target="nlFrame"; f.hidden=true;
+        for(const [n,v] of body.entries()){ const i=document.createElement("input"); i.type="hidden"; i.name=n; i.value=v; f.append(i); }
+        document.body.append(f); f.submit(); f.remove();
+        return {result:"unknown", detail:String(err)};
+      }catch(e2){ return {result:"error", detail:String(e2)}; }
+    }
   }
+  const newsText=r=> r.result==="ok" ? "Thank you! Check your inbox to confirm your signup."
+    : r.result==="unknown" ? "Thank you! If no confirmation email arrives within a few minutes, please check your spam folder."
+    : "Sorry, the signup didn’t go through. Please try again later.";
   // plain-text version of the summary, for email
   function summaryText(sc){
     const a=sc.a, L=[], F=filled;
@@ -780,7 +796,7 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
     L.push("","A fantasy is not a request. Any part of this can change, and every yes can become a no.");
     return L.join("\n");
   }
-  $("sendBtn").onclick=()=>{
+  $("sendBtn").onclick=async ()=>{
     const msg=$("sendMsg"), email=$("sendEmail").value.trim();
     msg.className="nlmsg";
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg.textContent="Please enter a valid email address."; $("sendEmail").focus(); return; }
@@ -788,7 +804,7 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
     commit();
     let note="Your email app should open with your scene.";
     if($("sendNews").checked){
-      if(NEWSLETTER.action){ postNews(email); note+=" You’re signed up for the newsletter too: check your inbox to confirm."; }
+      if(NEWSLETTER.action){ const r=await postNews(email); if(r.detail) console.warn("Newsletter signup:",r.result,r.detail); note+=" Newsletter: "+newsText(r); }
       else note+=" (The newsletter signup isn’t connected yet.)";
     }
     const subject="My scene: "+(cur.name||"Scene Builder");
@@ -812,9 +828,14 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg.textContent="Please enter a valid email address."; $("nlEmail").focus(); return; }
     if(!$("nlConsent").checked){ msg.textContent="Please tick the box to confirm you’d like the newsletter."; return; }
     if(!NEWSLETTER.action){ msg.textContent="The newsletter signup isn’t connected yet. You can begin without signing up."; return; }
-    postNews(email);
-    msg.className="nlmsg ok"; msg.textContent="Thank you! Check your inbox to confirm.";
-    setTimeout(begin,1200);
+    const btn=e.submitter; if(btn) btn.disabled=true;
+    msg.className="nlmsg ok"; msg.textContent="Signing you up…";
+    postNews(email).then(r=>{
+      if(btn) btn.disabled=false;
+      if(r.detail) console.warn("Newsletter signup:",r.result,r.detail);
+      msg.className="nlmsg"+(r.result==="error"?"":" ok"); msg.textContent=newsText(r);
+      if(r.result!=="error") setTimeout(begin,2500);
+    });
   });
   let started=false; try{ started=!!localStorage.getItem(STARTED); }catch(e){}
   if(started||hasContent(cur)) $("skip").textContent="Continue to Scene Builder";
