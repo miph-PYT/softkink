@@ -45,7 +45,27 @@ h1{font-family:var(--display);font-weight:900;font-size:clamp(2.8rem,11vw,4.4rem
 .sendme input[type=email]:focus{border-color:var(--accent)}
 .sendme .check{margin-bottom:.8rem}
 .sendme .hint{margin-top:.5rem}
+.begin{background:var(--card,var(--paper));border-radius:28px;padding:1.5rem 1.3rem;margin:0 0 2rem;max-width:34rem;
+  --card:#EDD2EB; --ink:#1C4A45; --soft:#4A716C; --line:#D6B3D3; color:var(--ink)}
+.begin h2{font-family:var(--display);font-weight:800;font-size:1.6rem;margin:0 0 .4rem;color:#2E968C}
+.begin h3{font-family:var(--display);font-weight:800;font-size:1.3rem;margin:1.4rem 0 .3rem;padding-top:1.2rem;border-top:1px solid var(--line);color:#2E968C}
+.begin p{margin:0 0 1rem}
+.begin .news{background:none;padding:0;margin:0;border-radius:0;max-width:none}
+.begin label{color:#1C4A45}
+.opt{font-weight:400;color:var(--soft);font-size:.9rem}
+.begin .pick{background:#2E968C;color:#FFFFFF}
+.choose{margin:0 0 2rem}
+.choose h2{font-family:var(--display);font-weight:800;font-size:1.6rem;margin:0 0 .3rem;color:var(--title,var(--ink))}
+.choose p{margin:0 0 1rem}
+.picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:.7rem;margin-bottom:.8rem}
+.pick{display:flex;flex-direction:column;align-items:flex-start;gap:.2rem;text-align:left;border-radius:22px;padding:1rem 1.2rem;background:var(--accent);color:var(--accent-ink);border:0}
+.pick b{font-family:var(--display);font-size:1.4rem;font-weight:800}
+.pick span{font-size:.92rem;opacity:.9}
 .startbtns{display:flex;gap:.5rem;flex-wrap:wrap}
+.menu{margin:0 0 1rem}
+.menu>summary{cursor:pointer;display:inline-block;font-size:.9rem;border:1px solid var(--line);border-radius:999px;padding:.35rem .9rem;list-style:none}
+.menu>summary::-webkit-details-marker{display:none}
+.menu .toolbar{margin:.6rem 0 0}
 .toolbar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
 
 button{font-family:var(--sans);font-size:.92rem;border-radius:999px;padding:.5rem 1.05rem;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink)}
@@ -65,7 +85,7 @@ textarea{resize:vertical;line-height:1.6}
 .stage input::placeholder,.stage textarea::placeholder{color:var(--soft);opacity:.7}
 .stage input[type=text]:focus,.stage textarea:focus{border-color:var(--accent);background:var(--field)}
 .stage .addown input[type=text]{padding:.4rem .7rem;border-radius:999px}
-#name{font-family:var(--display);font-size:1.7rem;font-weight:800}
+#name{font-family:var(--display);font-size:1.4rem;font-weight:800;margin-bottom:1rem}
 
 /* the thread: steps of the scene, tied together */
 .mode{display:inline-flex;margin-top:1rem;background:var(--bg);border:0;border-radius:999px;padding:2px}
@@ -99,6 +119,11 @@ textarea{resize:vertical;line-height:1.6}
 .hint{font-size:.82rem;color:var(--soft);margin:.4rem 0 0}
 .method{font-size:.88rem;color:var(--soft);margin:0 0 1.3rem;font-style:italic}
 .field{margin-bottom:1.6rem}
+.more{margin:0 0 1.6rem;border:1px solid var(--line);border-radius:18px;padding:.2rem 1rem}
+.more>summary{cursor:pointer;font-weight:600;color:var(--prompt,var(--ink));padding:.7rem 0;list-style-position:outside}
+.more>summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.moreinner{padding:.6rem 0 .2rem}
+.rewrite{margin-top:.5rem;font-size:.82rem;padding:.3rem .8rem}
 .fhint{font-size:.9rem;color:var(--soft);margin:-.2rem 0 .6rem;line-height:1.45}
 .chips{display:flex;flex-wrap:wrap;gap:.4rem}
 .chips button{font-size:.88rem;padding:.4rem .9rem;background:var(--bg);border-color:transparent}
@@ -177,6 +202,73 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
 }
 
 #name::placeholder{color:var(--soft);opacity:.75}
+/* ---- Accessibility pass: WCAG AA contrast and comfortable touch targets ---- */
+:root{ --title:#237A72; --prompt:#237A72; --accent:#237A72; }
+.builder{ --accent:#237A72; --rope:#237A72; }
+.begin h2,.begin h3{color:#237A72}
+.begin .opt{color:#3C5F5A}
+.begin .pick{background:#237A72;color:#FFFFFF}
+.pick span{opacity:1}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#237A72; --title:#DEFAFD; --prompt:#DEFAFD; --accent:#DEFAFD; --accent-ink:#1C4A45; --soft:#E6F8F6; }
+  .builder{ --paper:#1B5F58; --bg:#237A72; --line:#3A8A82; --accent:#DEFAFD; --accent-ink:#1C4A45; --field:#154D47; --soft:#D3F1EE; }
+}
+.stepof{font-size:.82rem;font-weight:600;letter-spacing:.02em;color:var(--soft);margin:.4rem 0 -.2rem}
+.chips{gap:.5rem}
+.chips button{min-height:44px;padding:.5rem 1rem}
+.check input,input[type=checkbox]{width:22px;height:22px;flex:none;margin-top:.1rem}
+.check{gap:.7rem;min-height:44px;align-items:center}
+footer .acts button,.addown button,.rewrite,.menu>summary{min-height:44px}
+.sources summary{padding:.5rem 0}
+.mode button{min-height:40px}
+.menu>summary{display:inline-flex;align-items:center;padding:0 1.1rem}
+
+.aside{font-size:.92rem;color:var(--soft);margin:-.6rem 0 0;padding:.7rem .9rem;border-left:3px solid var(--peach);background:transparent}
+.aside a,.further a{color:var(--accent);font-weight:600}
+.further{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+.further h3{font-family:var(--display);font-weight:800;font-size:1.3rem;margin:0 0 .3rem;color:var(--prompt,var(--ink))}
+.further p{margin:0 0 .9rem}
+.furtherlinks{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.6rem}
+.furtherlink{display:flex;flex-direction:column;gap:.15rem;padding:.9rem 1rem;border-radius:18px;background:var(--bg);text-decoration:none;color:var(--ink)!important;min-height:44px}
+.furtherlink b{color:var(--prompt,var(--ink));font-size:1rem}
+.furtherlink span{font-size:.88rem;color:var(--soft);font-weight:400}
+.furtherlink:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.stuck{margin:1.2rem 0 .4rem;border-radius:16px;background:var(--bg);padding:0 1rem}
+.stuck>summary{cursor:pointer;font-weight:600;color:var(--prompt,var(--ink));min-height:44px;display:flex;align-items:center}
+.stuck>summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
+.stuck p{margin:0 0 .9rem;font-size:.95rem}
+.stuck a{color:var(--accent);font-weight:600}
+.furtherlink em{font-style:normal;font-weight:600;font-size:.9rem;color:var(--accent);margin-top:.3rem}
+.further{margin:1.4rem 0 0;padding-top:1.2rem;border-top:1px solid var(--line)}
+.sendme{margin-top:1.4rem}
+
+/* ---- final step: three clear cards ---- */
+.finish{border-top:0;padding-top:0}
+.fcard{border-radius:22px;padding:1.2rem 1.1rem;margin:0 0 1rem;background:var(--bg)}
+.fcard h3{font-family:var(--display);font-weight:800;font-size:1.3rem;margin:0 0 .7rem;color:var(--prompt,var(--ink))}
+.fcard #name{background:var(--field);border:1px solid var(--fieldline);border-radius:14px;padding:.5rem .8rem;font-size:1.2rem;margin-bottom:.9rem}
+.preview{margin:0;display:grid;gap:.15rem}
+.preview dt{font-size:.8rem;font-weight:600;color:var(--soft);margin-top:.5rem}
+.preview dd{margin:0;line-height:1.45}
+.keepbtns{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.8rem}
+.keepbtns button{min-height:48px;font-size:.95rem}
+.keep .sendme{margin:.8rem 0 0;padding:1rem 0 0;border-top:1px solid var(--line)}
+.keep .sendme #sendBtn{margin-top:.2rem}
+.keep #pdfHint{margin:-.3rem 0 .8rem}
+.support{background:#EDD2EB;color:#1C4A45}
+.support h3{color:#1C4A45}
+.support .furtherlink{background:#FFFFFF}
+.support .furtherlink b{color:#1C4A45}
+.support .furtherlink span{color:#3C5F5A}
+.support .furtherlink em{color:#1C4A45}
+.further{border-top:0;margin-top:0}
+
+@media (prefers-color-scheme:dark){ .fcard:not(.support){background:#154D47} .fcard #name,.keep .sendme input[type=email]{background:#0F3F3A} }
+.tosite{display:flex;align-items:center;justify-content:center;min-height:52px;margin:2rem 0 0;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-weight:700;text-decoration:none}
+.tosite:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.sitelink{margin:1rem 0 0;font-size:.92rem;text-align:center}
+.sitelink a{color:#1C4A45;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:.6rem .4rem}
 #print{display:none}
 @media print{
   body{background:#fff;color:#000;font-size:11pt}
@@ -214,7 +306,7 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
 </head>
 <body>
 <main class="wrap">
-  <h1>Scene Builder</h1>
+  <h1>Soft Kink Scene Builder</h1>
   <section id="welcome" aria-label="Welcome">
   <div class="intro">
     <p class="ask"><strong>Erotic fantasies.</strong> Do you have them? How do you feel about them?</p>
@@ -226,48 +318,80 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
     <p class="sig">Pyt, Soft Kink</p>
   </div>
 
-  <form class="news" id="news" novalidate>
-    <h2>Stay in touch</h2>
-    <p>Workshops, rope rituals, and reflections on kink, consent and intimacy. A few times a year, straight to your inbox. It’s optional, and the tool is yours either way.</p>
-    <label for="nlEmail">Your email</label>
-    <input type="email" id="nlEmail" autocomplete="email" placeholder="you@example.com">
-    <label class="check"><input type="checkbox" id="nlConsent"> Yes, send me the Soft Kink newsletter. I can unsubscribe at any time.</label>
-    <p class="nlmsg" id="nlMsg" aria-live="polite"></p>
-    <div class="startbtns">
-      <button type="submit" class="primary">Sign up and begin</button>
-      <button type="button" id="skip">Begin without signing up</button>
+  <section class="begin" aria-label="Before you begin">
+    <h2>Before you begin</h2>
+    <p>Subscribe to the Soft Kink newsletter. A few emails a year, and entirely optional.</p>
+    <form class="news" id="news" novalidate>
+      <label for="nlEmail">Your email <span class="opt">(optional)</span></label>
+      <input type="email" id="nlEmail" autocomplete="email" placeholder="you@example.com">
+      <label class="check"><input type="checkbox" id="nlConsent"> Yes, send me the Soft Kink newsletter. I can unsubscribe at any time.</label>
+      <p class="nlmsg" id="nlMsg" aria-live="polite"></p>
+    </form>
+    <h3>Then begin your journey</h3>
+    <p><strong>Essentials:</strong> about 15 minutes.<br><strong>Everything, with the extras:</strong> about 45 minutes.<br>Skip what doesn’t speak to you.</p>
+    <div class="picks">
+      <button type="button" class="pick" id="startDeep"><b>Begin</b><span>Your progress is saved on this device</span></button>
     </div>
-  </form>
+    <button type="button" id="skip" hidden>Continue my scene</button>
+  </section>
+
+
+
+
   </section>
 
   <div id="app" hidden>
-  <div class="toolbar">
-    <button type="button" id="new">New scene</button>
-    <button type="button" id="printBlank">Print blank worksheet</button>
-    <button type="button" id="about">About this tool</button>
-  </div>
+  <details class="menu">
+    <summary>Menu</summary>
+    <div class="toolbar">
+      <button type="button" id="about">About this tool</button>
+      <button type="button" id="new">Start a new scene</button>
+      <button type="button" id="printBlank">Print blank worksheet</button>
+    </div>
+  </details>
 
   <section class="builder" aria-label="Scene in progress">
-    <label for="name">Scene name</label>
-    <input type="text" id="name" maxlength="100" placeholder="Untitled scene" autocomplete="off">
-    <div class="mode" role="group" aria-label="Version">
-      <button type="button" id="modeFull">Full, 8 steps</button>
-      <button type="button" id="modeQuick">Quick, 4 steps</button>
-    </div>
     <nav class="thread" id="thread" aria-label="Steps"></nav>
     <details class="sofar" id="sofar"><summary>Your scene so far</summary><dl id="sofarList"></dl></details>
     <div class="stage" id="stage"></div>
     <div class="finish" id="finish" hidden>
-      <label class="check"><input type="checkbox" id="incPrivate"> Include my private fantasy version</label>
-      <p class="hint">Download summary opens a one-page summary in your print dialog. Choose “Save as PDF” to save it.</p>
-      <div class="sendme">
-        <label for="sendEmail">Or email it to yourself</label>
-        <input type="email" id="sendEmail" autocomplete="email" placeholder="you@example.com">
-        <label class="check"><input type="checkbox" id="sendNews"> Also sign me up for the Soft Kink newsletter. I can unsubscribe at any time.</label>
-        <button type="button" id="sendBtn">Email me my scene</button>
-        <p class="hint">Opens your own email app with your scene written out, ready to send to yourself. Nothing passes through Soft Kink.</p>
-        <p class="nlmsg" id="sendMsg" aria-live="polite"></p>
-      </div>
+
+      <section class="fcard ready" aria-labelledby="readyH">
+        <h3 id="readyH">Your scene</h3>
+        <label for="name">Give it a name</label>
+        <input type="text" id="name" maxlength="100" placeholder="For example: The slow evening" autocomplete="off">
+        <dl class="preview" id="preview"></dl>
+      </section>
+
+      <section class="fcard keep" aria-labelledby="keepH">
+        <h3 id="keepH">Keep it</h3>
+        <div class="keepbtns">
+          <button type="button" class="primary" id="pdfBtn">Save as PDF</button>
+          <button type="button" id="emailToggle" aria-expanded="false" aria-controls="sendBox">Email it to me</button>
+        </div>
+        <p class="hint" id="pdfHint">Save as PDF opens your device’s print or share screen. Choose “Save as PDF” there.</p>
+        <label class="check"><input type="checkbox" id="incPrivate"> Include my private fantasy version</label>
+        <div class="sendme" id="sendBox" hidden>
+          <label for="sendEmail">Your email</label>
+          <input type="email" id="sendEmail" autocomplete="email" placeholder="you@example.com">
+          <label class="check"><input type="checkbox" id="sendNews"> Also sign me up for the Soft Kink newsletter. I can unsubscribe at any time.</label>
+          <button type="button" class="primary" id="sendBtn">Open in my email app</button>
+          <p class="hint">Your email app opens with your scene written out, ready to send to yourself. Nothing passes through Soft Kink.</p>
+          <p class="nlmsg" id="sendMsg" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="fcard support further" aria-labelledby="supportH">
+        <h3 id="supportH">Where to go from here…</h3>
+        <p>I’m curious how this was for you. Was it a smooth process? Daunting? Frustrating?</p>
+        <p>Engaging with this topic can bring up a lot: feeling wrong for what you desire, or frustrated that you “don’t get it.”</p>
+        <p>I’m here to help. As a parts-work coach and kink facilitator, I can support you on your journey towards a more playful and integrated expression of your sensuality.</p>
+        <div class="furtherlinks">
+          <a class="furtherlink" id="offerSessions" target="_blank" rel="noopener"><b>One-to-one sessions</b><span>Talk it through before you talk to your partner(s). Together we find your words, sense your limits, and shape a first step that feels exciting rather than scary.</span><em>Book a session</em></a>
+          <a class="furtherlink" id="offerWorkshops" target="_blank" rel="noopener"><b>Workshops</b><span>Practise consent, communication and play in a held group, from couples’ rituals to rope.</span><em>See upcoming workshops</em></a>
+        </div>
+        <p class="sitelink"><a href="https://www.softkink.dk">Continue to softkink.dk</a></p>
+      </section>
     </div>
     <div class="nav">
       <span class="status" id="status" aria-live="polite"></span>
@@ -298,6 +422,7 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
       <button type="button" id="importBtn">Restore from backup</button>
       <input type="file" id="importFile" accept="application/json" hidden>
     </div>
+      <a class="tosite" href="https://www.softkink.dk">Continue to softkink.dk</a>
   </footer>
 </main>
 <div id="print" aria-hidden="true"></div>
@@ -316,23 +441,44 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
     return foc.length ? join(foc.map(phrase),"and") : join(f.map(phrase),"or");
   }
   const val=(x,s)=>typeof x==="function"?x(s):x;
+  function openerFrom(sc){
+    const a=sc.a, f=(a.feel||[]).map(v=>PHRASE[v]||v.toLowerCase());
+    const feelStr=f.length>1?f.slice(0,-1).join(", ")+" and "+f[f.length-1]:(f[0]||"");
+    const t=String(a.first||a.tryPart||"").trim().replace(/[.!\s]+$/,"");
+    return "Lately I’ve been imagining something I’d love to share with you."
+      +(feelStr?` What draws me to it is wanting to feel ${feelStr}.`:"")
+      +(t?` I’d love to try a small version of it with you: ${t.charAt(0).toLowerCase()+t.slice(1)}.`:" I’d love to explore a small version of it with you.")
+      +" And it’s completely fine if it’s not for you.";
+  }
   const filled=v=>Array.isArray(v)?v.length>0:!!(v&&String(v).trim());
-  const FANT=[{id:"setting",name:"Where and when"},{id:"roles",name:"Who’s there"},{id:"self",name:"Who you are in it"},{id:"props",name:"Outfits, props and tools"},{id:"f_begin",name:"How it begins"},{id:"f_build",name:"How it builds and peaks"},{id:"f_end",name:"How it ends"},{id:"senses",name:"Words, sounds, textures, smells"}];
-  const fv=(a,e)=>e.id==="setting" ? [...(a.whereSel||[]),a.setting||""].filter(filled).join(", ")
+  const FANT=[{id:"story",name:"What happens"},{id:"setting",name:"Where and when"},{id:"roles",name:"Who’s there"},{id:"self",name:"Who you are in it"},{id:"props",name:"Outfits, props and tools"},{id:"senses",name:"Words, sounds, textures, smells"}];
+  const fv=(a,e)=>e.id==="story" ? [a.story,a.f_begin,a.f_build,a.f_end].filter(filled).join("\n")
+    : e.id==="setting" ? [...(a.whereSel||[]),a.setting||""].filter(filled).join(", ")
     : e.id==="props"
     ? [...(a.outfits||[]),...(a.propsSel||[]),...(a.tools||[]),a.props||""].filter(filled).join(", ")
     : a[e.id];
 
+  // Where the gentle offers point. Replace with your own pages when ready.
+  const OFFERS={sessions:"https://www.softkink.dk/booking", workshops:"https://softkink.dk", site:"softkink.dk", siteUrl:"https://softkink.dk"};
+  const CREDIT=`Made with the Soft Kink Scene Builder · ${OFFERS.site}`;
+
+  const STUCK={
+    "Heart":"Not sure what you want to feel? That’s very common. The longing often only becomes clear when someone asks the right questions. We can find it together in a session.",
+    "Spark":"Nothing comes to mind, or what comes feels like too much? We can explore it slowly together, at your pace.",
+    "Fantasy":"Hard to let yourself imagine freely? Shame and inner critics often show up right here. I can help you meet them with curiosity instead of judgment.",
+    "Make it real":"Can’t find a version that feels doable? Bridging fantasy and real life is exactly what I help people with.",
+    "Container":"Unsure what your limits are, or how to talk about them? We can practise naming boundaries, signals and needs in a safe setting.",
+    "Say it":"Nervous about bringing it up? Most people are. We can find your words together, so the conversation feels lighter."
+  };
+
   const STAGES=[
     {name:"Heart", title:"What is this scene for?",
-     method:"Every scene starts with why. **The feeling it’s for matters more than the acts in it**, and it guides every step that follows.",
+     method:"Every scene starts with why. **The feeling it’s for matters more than the acts in it.** Skip anything along the way that doesn’t speak to you.",
      fields:[
       {id:"feel",type:"chips",label:"What do you want to feel?",options:["Wanted","Seen","Held","Adored","Powerful","Surrendered","Playful","Free","Safe","Wild","Taken care of","Let go"]}
      ]},
     {name:"Spark", title:"Find the spark",
-     method:s=>{ const t=target(s); return t
-       ? `Following your longing to feel **${t}**.`
-       : "Choose feelings in step 1 and these questions will follow them."; },
+     method:s=>{ const t=target(s); return t ? `Following your longing to feel **${t}**.` : "Choose feelings in step 1 and these questions will follow them."; },
      fields:[
       {id:"focus",type:"chips",noOwn:true,show:s=>(s.a.feel||[]).length>1,
        label:"Which longings do you want to follow here? Pick one or more.",options:s=>(s&&s.a.feel)||[]},
@@ -344,91 +490,79 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
         : "What made it so charged? Name the exact moment it peaked."; }},
       {id:"body",type:"area",rows:2,label:s=>{ const t=target(s); return t
         ? `Where in your body do you notice feeling ${t}, even now as you write?`
-        : "Where in your body do you notice it, even now as you write?"; }}
-     ]},
-    {name:"Charge", title:"What gives it charge?",
-     method:"Looking at your spark: what makes it hot?",
-     fields:[
-      {id:"corner",type:"chips",label:"Which of these is alive in your spark?",options:["Longing and anticipation","Breaking a rule","Power","Overcoming hesitation"]},
-      {id:"lehm",type:"chips",label:"Any of these themes?",options:["More than two people","Power, control, roughness","Novelty and adventure","Taboo and forbidden","Sharing a partner","Passion and romance","Playing with gender or orientation"]},
-      {id:"tension",type:"area",rows:3,label:"Attraction plus an obstacle creates excitement. What’s the tension or obstacle here?"}
+        : "Where in your body do you notice it, even now as you write?"; }},
+      {id:"themes",type:"chips",label:"Is any of this part of it? (optional)",
+       options:["Anticipation","Breaking a rule","Power and control","Surrender","Being watched","More than two people","Novelty and adventure","Taboo","Romance and passion","Playing with gender"]}
      ]},
     {name:"Fantasy", title:"Write the fantasy version",
      method:"**A fantasy can stay a fantasy.** Here you can lean all the way into it, without worrying about how realistic or reasonable it is. This is about painting a vivid, colourful picture.",
      fields:[
-      {id:"whereSel",type:"chips",label:"Where does it happen?",options:["Bedroom","A hotel","Outdoors","A public place","Somewhere forbidden","A play space","At work","Somewhere new"]},
-      {id:"setting",type:"text",label:"Any details about the place or time?"},
-      {id:"roles",type:"text",label:"Who’s there?"},
-      {id:"self",type:"text",label:"Who are you in it?",hint:"In a fantasy you don’t have to be yourself. You might be a version of you, or play a role: the one in charge, the one being cared for, a stranger, a guide, someone bolder or softer than everyday you."},
-      {id:"outfits",type:"chips",label:"Outfits: what are you, or they, wearing?",options:["Lingerie","Suit, or shirt and tie","Uniform","Leather","Latex","A costume","Heels or boots","Something of theirs","Nothing at all"]},
-      {id:"propsSel",type:"chips",label:"Props",options:["Blindfold","Rope","Cuffs","Collar and leash","Candles","Feathers","Ice","Massage oil","A mirror","Music"]},
-      {id:"tools",type:"chips",label:"Tools and toys",options:["Hands only","Flogger","Paddle","Crop","Vibrator or wand","Dildo or plug","Gag","Clamps","Spreader bar"]},
-      {id:"f_begin",type:"area",rows:3,label:"How it begins"},
-      {id:"f_build",type:"area",rows:4,label:"How it builds and peaks"},
-      {id:"f_end",type:"area",rows:3,label:"How it ends"},
-      {id:"senses",type:"area",rows:3,label:"Words, sounds, textures, smells"}
+      {id:"story",type:"area",rows:9,label:"Write it the way it plays in your head",hint:"From the first moment to the last. Don’t edit, don’t tidy up."},
+      {id:"whereSel",type:"chips",group:"fdetails",groupLabel:"Add details: place, roles, outfits, props",label:"Where does it happen?",options:["Bedroom","A hotel","Outdoors","A public place","Somewhere forbidden","A play space","At work","Somewhere new"]},
+      {id:"roles",type:"text",group:"fdetails",label:"Who’s there?"},
+      {id:"self",type:"text",group:"fdetails",label:"Who are you in it?",hint:"In a fantasy you don’t have to be yourself. You might be a version of you, or play a role: the one in charge, the one being cared for, a stranger, a guide, someone bolder or softer than everyday you."},
+      {id:"outfits",type:"chips",group:"fdetails",label:"Outfits: what are you, or they, wearing?",options:["Lingerie","Suit, or shirt and tie","Uniform","Leather","Latex","A costume","Heels or boots","Something of theirs","Nothing at all"]},
+      {id:"propsSel",type:"chips",group:"fdetails",label:"Props",options:["Blindfold","Rope","Cuffs","Collar and leash","Candles","Feathers","Ice","Massage oil","A mirror","Music"]},
+      {id:"tools",type:"chips",group:"fdetails",label:"Tools and toys",options:["Hands only","Flogger","Paddle","Crop","Vibrator or wand","Dildo or plug","Gag","Clamps","Spreader bar"]},
+      {id:"senses",type:"area",rows:2,group:"fdetails",label:"Words, sounds, textures, smells"}
      ]},
-    {name:"Sort", title:"Sort your fantasy",
-     method:"Go through your fantasy piece by piece. Keep what you’d really play, change what needs changing, and leave the rest in your imagination. **Keep the feeling, not necessarily the literal act.**",
+    {name:"Make it real", title:"Make it real",
+     method:"**Keep the feeling, not necessarily the literal act.** Find the part you’d love to try, and a first version small enough to feel doable and fun.",
      fields:[
-      {id:"needFantasy",type:"note",show:s=>!FANT.some(e=>filled(fv(s.a,e))),
-       label:"Write your fantasy version in step 4 first, then come back here to sort it.",go:3},
-      ...FANT.flatMap(e=>[
-        {id:"ref_"+e.id,type:"ref",el:e,show:s=>filled(fv(s.a,e)),label:e.name},
-        {id:"pl_"+e.id,type:"choice",noOwn:true,show:s=>filled(fv(s.a,e)),label:"In the real scene, I’d…",printLabel:`${e.name}: in the real scene, I’d…`,
-         options:["Keep it","Change it","Leave it in the fantasy"]},
-        {id:"pc_"+e.id,type:"area",rows:2,show:s=>filled(fv(s.a,e))&&s.a["pl_"+e.id]==="Change it",label:"How it looks in the real scene",blankSkip:true}
-      ])
-     ]},
-    {name:"Real scene", title:"Shape the real scene",
-     method:"Now outline the scene you’d actually play, built from what you kept and changed.",
-     fields:[
-      {id:"keptBox",type:"kept"},
-      {id:"sc_begin",type:"area",rows:2,label:"How it begins"},
-      {id:"sc_build",type:"area",rows:3,label:"How it builds"},
-      {id:"sc_peak",type:"area",rows:2,label:"The peak"},
-      {id:"sc_land",type:"area",rows:2,label:"How it ends and lands"},
+      {id:"needFantasy",type:"note",show:s=>!FANT.some(e=>filled(fv(s.a,e))),label:"Write your fantasy first, then come back here.",go:2},
+      {id:"refStory",type:"ref",el:{id:"story",name:"your fantasy"},show:s=>filled(fv(s.a,{id:"story"})),label:"your fantasy",refLabel:"Your fantasy"},
+      {id:"tryPart",type:"area",rows:3,label:"What part of it would you love to try for real?"},
+      {id:"first",type:"area",rows:3,label:"The smallest version you could try first",hint:"Small enough that it feels exciting rather than scary. You can always go further next time."},
+      {id:"wheel",type:"choice",label:"Who is doing, and who is it for?",hint:"Pick what fits this scene best.",
+       options:["I do something, for my own pleasure","I do something, for their pleasure","They do something, for my pleasure","They do something, for their pleasure","It shifts during the scene"]},
       {id:"prepSel",type:"chips",label:"What to get or prepare",
        options:s=>[...new Set([...((s&&s.a.outfits)||[]),...((s&&s.a.propsSel)||[]),...((s&&s.a.tools)||[]),"Set up the space","Water and snacks","A blanket for aftercare"])]},
-      {id:"prep",type:"area",rows:2,label:"Anything else to prepare"},
-      {id:"first",type:"area",rows:2,label:"The smallest version I could try first"}
+      {id:"sc_begin",type:"area",rows:2,group:"plan",groupLabel:"Plan it in more detail (optional)",label:"How it begins"},
+      {id:"sc_build",type:"area",rows:2,group:"plan",label:"How it builds"},
+      {id:"sc_peak",type:"area",rows:2,group:"plan",label:"The peak"},
+      {id:"sc_land",type:"area",rows:2,group:"plan",label:"How it ends and lands"},
+      {id:"leave",type:"area",rows:2,group:"plan",label:"What stays in the fantasy, for now"}
      ]},
-    {name:"Agreements", title:"Agree on the frame",
-     method:"What your real scene needs to feel safe to play.",
+    {name:"Container", title:"Build the container",
+     method:"What holds your scene: **your limits before, your signals during, and your care after.**",
      fields:[
-      {id:"wheel",type:"choice",label:"In this scene I mainly want to…",options:["Take: I do, it’s for me","Serve: I do, it’s for you","Accept: you do, it’s for me","Allow: you do, it’s for you","It shifts during the scene"]},
       {id:"limits",type:"area",rows:2,label:"Hard limits, and maybes that need care",hint:"Things that are a clear no for you, and things you might try with extra care. Only you decide what goes here."},
       {id:"signals",type:"chips",label:"Stop and slow-down signals",hint:"Agree on at least one signal that works without words, for moments when speaking is hard.",
        options:["Traffic lights: red = stop, yellow = slow down, green = more, please","Two taps when I can’t speak","Dropping an object I’m holding","A hand squeeze","Saying “pause”"]},
-      {id:"checkins",type:"chips",label:"How and when we check in",
+      {id:"checkins",type:"chips",group:"checks",groupLabel:"Add check-ins (optional)",label:"How and when we check in",
        options:["Before we start","Halfway through","Whenever intensity changes","Squeeze check: squeeze back if you’re okay","Colour check: “What colour are you?”","A look or a word","Afterwards"]},
       {id:"aftercare",type:"chips",label:"Aftercare I’d like, and can offer",hint:"Aftercare is the care you give each other after a scene, to land and reconnect.",
        options:["Cuddling","A blanket","Water and a snack","Talking it through","Quiet time together","Words of appreciation","A shower or bath","Some time alone","A check-in the next day"]}
      ]},
-    {name:"Share", title:"Bring it to your partner",
-     method:"Your scene is ready to share. **Reveal it in layers:** the feeling first, details when it feels safe on both sides.",
+    {name:"Say it", title:"Say it out loud",
+     method:"**Reveal it in layers:** the feeling first, details when it feels safe on both sides. We’ve started your opener from your answers. Make it sound like you.",
      fields:[
-      {id:"opener",type:"area",rows:4,label:"Your opener",placeholder:"Lately I’ve been imagining… What draws me is feeling… I’d love to try a small version, like… And it’s completely fine if…"},
+      {id:"opener",type:"area",rows:5,label:"Your opener",prefill:openerFrom},
       {id:"when",type:"chips",label:"When and where to talk about it",
        options:["Somewhere private and relaxed","Not right before or during sex","On a walk","Over text first","Over dinner"]},
       {id:"hear",type:"chips",label:"What would help me feel safe after sharing?",
        options:["“Thank you for telling me”","“I’m not judging you”","Ask me questions","Tell me how it feels to hear this","Take your time, we can talk more later","Tell me one thing about it that interests you","It’s okay if it’s a no for you"]}
-     ]}
+     ]},
+    {name:"Keep it", title:"Keep your scene",
+     method:"**Your scene is ready.** Give it a name, save it as a PDF or email it to yourself. And if you’d like support with the next step, I’m here.",
+     fields:[]}
   ];
 
-  // quick version: four short steps, same answers underneath
+  // Quick version: the same journey in five short steps
   const FIELD=id=>STAGES.flatMap(st=>st.fields).find(f=>f.id===id);
   const QUICK=[
-    {name:"Heart", title:"What is this scene for?", method:"Quick version. Pick the feelings this scene is for.",
-     fields:[FIELD("feel")]},
-    {name:"Fantasy", title:"The fantasy, in a few lines", method:"No need to polish it. Just get it down.",
-     fields:[{id:"story",type:"area",rows:5,label:"What happens in your fantasy?"}]},
-    {name:"Real scene", title:"What could you actually try?", method:"Keep the feeling, keep it small.",
-     fields:[{...FIELD("first"),rows:3,label:"A small version you could try soon"},FIELD("prep")]},
-    {name:"Frame", title:"The bare minimum", method:"Enough to play safely.",
-     fields:[FIELD("signals"),FIELD("aftercare")]}
+    {name:"Feel", title:"What do you want to feel?", method:"Pick what pulls at you. **The feeling matters more than the acts.**",
+     fields:[{...FIELD("feel"),label:"Pick one or more"}]},
+    {name:"Imagine", title:"Imagine it", method:"**A fantasy can stay a fantasy.** Write it the way it plays in your head, in a few lines.",
+     fields:[{...FIELD("story"),rows:6,hint:null}]},
+    {name:"Doable", title:"Make it doable", method:"**Keep the feeling, not necessarily the literal act.**",
+     fields:[FIELD("tryPart"),FIELD("first")]},
+    {name:"Safe", title:"Keep it safe", method:"The essentials, so it feels safe and fun to play.",
+     fields:[FIELD("signals"),{...FIELD("limits"),type:"text",label:"Anything that’s a clear no for you?",hint:null},FIELD("aftercare")]},
+    {name:"Say it", title:"Say it out loud", method:"We’ve started your opener from your answers. **Make it sound like you.**",
+     fields:[FIELD("opener"),FIELD("hear")]}
   ];
-  const stepsFor=sc=>sc&&sc.quick?QUICK:STAGES;
+  const stepsFor=()=>STAGES;  // one journey; the quick version was retired
 
   const KEY="scenes.v1", CUR="scenes.current";
   const $=id=>document.getElementById(id);
@@ -454,7 +588,7 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
   try{ const id=localStorage.getItem(CUR); cur=scenes.find(s=>s.id===id)||null; }catch(e){}
   if(!cur) cur=blank();
 
-  function flash(msg){ statusEl.textContent=msg; clearTimeout(flash.t); flash.t=setTimeout(()=>statusEl.textContent="",3000); }
+  function flash(msg,ms){ statusEl.textContent=msg; clearTimeout(flash.t); flash.t=setTimeout(()=>statusEl.textContent="",ms||3000); }
   const stageFilled=(s,i)=>stepsFor(s)[i].fields.some(f=>filled(s.a[f.id]));
   const hasContent=s=>filled(s.name)||Object.values(s.a).some(filled);
 
@@ -488,18 +622,17 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
   function sceneRows(s){
     const a=s.a, rows=[];
     const add=(step,label,text)=>{ if(filled(text)) rows.push({step,label,text}); };
-    add(0,"It’s for feeling",list2(target(s)||[],a.longing?clip(a.longing,90):[]));
+    add(0,"It’s for feeling",target(s)||"");
     add(1,"The spark",clip(a.peak,140));
-    add(2,"The charge",list2(a.corner||[],a.lehm||[],a.tension?clip(a.tension,80):[]));
-    add(3,"The fantasy",list2(a.whereSel||[],a.setting||[],a.roles||[],a.self||[],[a.f_begin,a.f_build,a.f_end,a.story].filter(filled).map(t=>clip(t,50)).join(" → ")||[]));
-    add(5,"The real scene",[a.sc_begin,a.sc_build,a.sc_peak,a.sc_land].filter(filled).map(t=>clip(t,60)).join(" → "));
-    add(6,"The frame",list2(a.wheel||[],filled(a.signals)?"signals: "+clip([].concat(a.signals).join(", "),50):[]));
+    add(2,"The fantasy",list2(a.whereSel||[],a.roles||[],a.self||[],fv(a,{id:"story"})?clip(fv(a,{id:"story"}),100):[]));
+    add(3,"The real scene",list2(a.wheel||[],a.tryPart?clip(a.tryPart,70):[],a.first?"first: "+clip(a.first,70):[]));
+    add(4,"The container",list2(filled(a.signals)?"signals: "+clip([].concat(a.signals).join(", "),50):[]));
     return rows;
   }
   function renderSofar(){
     const box=$("sofar"), dl=$("sofarList"); dl.innerHTML="";
     const rows=sceneRows(cur).filter(r=>r.step<stage);
-    box.hidden=!rows.length||!!cur.quick;
+    box.hidden=!rows.length;
     rows.forEach(r=>{
       const b=document.createElement("button"); b.type="button"; b.className="link"; b.title="Go to step "+(r.step+1);
       const dt=document.createElement("dt"); dt.textContent=r.label;
@@ -507,9 +640,36 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
       b.append(dt,dd); b.onclick=()=>go(r.step); dl.append(b);
     });
   }
+  const openGroups={};
+  function renderPreview(){
+    const a=cur.a, dl=$("preview"); dl.innerHTML="";
+    const rows=[["For feeling",target(cur)||""],["You’d love to try",a.tryPart],["Your first step",a.first],["Your opener",a.opener?clip(a.opener,160):""]];
+    rows.filter(([,v])=>filled(v)).forEach(([k,v])=>{
+      const dt=document.createElement("dt"); dt.textContent=k;
+      const dd=document.createElement("dd"); dd.textContent=v; dl.append(dt,dd);
+    });
+    if(!dl.children.length){ const dd=document.createElement("dd"); dd.textContent="Fill in a few steps and your scene will appear here."; dl.append(dd); }
+  }
   function renderStage(){
     renderSofar();
     const s=stepsFor(cur)[stage]; stageEl.innerHTML="";
+    const groups={};
+    const host=f=>{
+      if(!f.group) return stageEl;
+      if(!groups[f.group]){
+        const d=document.createElement("details"); d.className="more";
+        const sm=document.createElement("summary"); sm.textContent=f.groupLabel||"More";
+        const inner=document.createElement("div"); inner.className="moreinner";
+        d.append(sm,inner);
+        const anyFilled=s.fields.some(g=>g.group===f.group&&filled(cur.a[g.id]));
+        d.open = f.group in openGroups ? openGroups[f.group] : anyFilled;
+        d.addEventListener("toggle",()=>{ openGroups[f.group]=d.open; });
+        stageEl.append(d); groups[f.group]=inner;
+      }
+      return groups[f.group];
+    };
+    const of=document.createElement("p"); of.className="stepof"; of.textContent=`Step ${stage+1} of ${stepsFor(cur).length}`;
+    stageEl.append(of);
     const h=document.createElement("h2"); h.textContent=val(s.title,cur);
     const m=document.createElement("p"); m.className="method"; m.innerHTML=rich(val(s.method,cur));
     stageEl.append(h,m);
@@ -519,10 +679,15 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
       const wrap=document.createElement("div"); wrap.className="field";
       if(f.id==="sc_begin") wrap.className="field fieldgroup";
       const fid="f_"+f.id;
+      if(f.type==="aside"){
+        const p=document.createElement("p"); p.className="aside"; p.textContent=f.text+" ";
+        const a=document.createElement("a"); a.href=f.href(); a.target="_blank"; a.rel="noopener"; a.textContent=f.linkText;
+        p.append(a); wrap.className="field asidewrap"; wrap.append(p); host(f).append(wrap); return;
+      }
       if(f.type==="note"){
         const p=document.createElement("p"); p.className="note"; p.textContent=label;
         const b=document.createElement("button"); b.type="button"; b.textContent="Go to step "+(f.go+1); b.onclick=()=>go(f.go);
-        wrap.className="field note"; wrap.append(p,b); stageEl.append(wrap); return;
+        wrap.className="field note"; wrap.append(p,b); host(f).append(wrap); return;
       }
       if(f.type==="kept"){
         const rows=FANT.filter(e=>filled(fv(cur.a,e))&&["Keep it","Change it"].includes(cur.a["pl_"+e.id]))
@@ -531,13 +696,13 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
         const lab=document.createElement("span"); lab.className="flabel"; lab.textContent="What you’re bringing from the fantasy";
         const box=document.createElement("div"); box.className="ref";
         rows.forEach(([k,v])=>{ const p=document.createElement("p"); p.style.margin="0 0 .3rem"; const b=document.createElement("b"); b.textContent=k+": "; p.append(b,document.createTextNode(v)); box.append(p); });
-        wrap.append(lab,box); stageEl.append(wrap); return;
+        wrap.append(lab,box); host(f).append(wrap); return;
       }
       if(f.type==="ref"){
         wrap.className="field fieldgroup";
-        const lab=document.createElement("span"); lab.className="flabel"; lab.textContent="From your fantasy: "+label.toLowerCase();
+        const lab=document.createElement("span"); lab.className="flabel"; lab.textContent=f.refLabel||("From your fantasy: "+label.toLowerCase());
         const q=document.createElement("p"); q.className="ref"; q.textContent=fv(cur.a,f.el);
-        wrap.append(lab,q); stageEl.append(wrap); return;
+        wrap.append(lab,q); host(f).append(wrap); return;
       }
       if(f.type==="chips"||f.type==="choice"){
         const lab=document.createElement("span"); lab.className="flabel"; lab.id=fid+"_l"; lab.textContent=label;
@@ -590,18 +755,35 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
         const lab=document.createElement("label"); lab.htmlFor=fid; lab.textContent=label;
         const el=f.type==="area"?document.createElement("textarea"):document.createElement("input");
         if(f.type==="area") el.rows=f.rows||4; else el.type="text";
+        if(f.prefill&&!filled(cur.a[f.id])) cur.a[f.id]=f.prefill(cur);
         el.id=fid; el.value=cur.a[f.id]||""; if(f.placeholder) el.placeholder=f.placeholder;
         el.addEventListener("input",()=>{ cur.a[f.id]=el.value; commit(); });
         wrap.append(lab);
         if(f.hint){ const h=document.createElement("p"); h.className="fhint"; h.id=fid+"_h"; h.textContent=f.hint; wrap.append(h); el.setAttribute("aria-describedby",h.id); }
         wrap.append(el);
+        if(f.prefill){
+          const rb=document.createElement("button"); rb.type="button"; rb.className="rewrite"; rb.textContent="Start again from my answers";
+          rb.onclick=()=>{ cur.a[f.id]=f.prefill(cur); el.value=cur.a[f.id]; commit(); el.focus(); };
+          wrap.append(rb);
+        }
       }
-      stageEl.append(wrap);
+      host(f).append(wrap);
     });
+    // gentle "Stuck?" support at the end of each step
+    if(STUCK[s.name]){
+      const d=document.createElement("details"); d.className="stuck";
+      const key="stuck"+stage; d.open=!!openGroups[key];
+      d.addEventListener("toggle",()=>{ openGroups[key]=d.open; });
+      const sm=document.createElement("summary"); sm.textContent="Stuck?";
+      const p=document.createElement("p"); p.textContent=STUCK[s.name]+" ";
+      const a=document.createElement("a"); a.href=OFFERS.sessions; a.target="_blank"; a.rel="noopener"; a.textContent="Book a session with me";
+      p.append(a); d.append(sm,p); stageEl.append(d);
+    }
     backBtn.disabled=stage===0; backBtn.style.visibility=stage===0?"hidden":"visible";
     const last=stage===stepsFor(cur).length-1;
-    nextBtn.textContent=last?"Download summary":"Next";
+    nextBtn.textContent="Next"; nextBtn.hidden=last;
     $("finish").hidden=!last; $("incPrivate").checked=!!cur.incPrivate;
+    if(last) renderPreview();
   }
 
   function go(i){ stage=Math.max(0,Math.min(stepsFor(cur).length-1,i)); renderMode(); renderThread(); renderStage(); }
@@ -611,13 +793,17 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
     else{ commit(); if(hasContent(cur)) printSummary(cur); else flash("Write something first"); }
   };
   nameEl.addEventListener("input",()=>{ cur.name=nameEl.value; commit(); });
+  $("pdfBtn").onclick=()=>{ commit(); if(hasContent(cur)) printSummary(cur); else flash("Write something first"); };
+  $("emailToggle").onclick=()=>{
+    const box=$("sendBox"), open=box.hidden;
+    box.hidden=!open; $("emailToggle").setAttribute("aria-expanded",String(open));
+    if(open) $("sendEmail").focus();
+  };
   function renderMode(){
-    $("modeFull").setAttribute("aria-pressed",cur.quick?"false":"true");
-    $("modeQuick").setAttribute("aria-pressed",cur.quick?"true":"false");
+    if(!$("modeFull")) return;
   }
   const setMode=q=>{ if(!!cur.quick===q) return; cur.quick=q; commit(); go(0); renderList(); };
-  $("modeFull").onclick=()=>setMode(false);
-  $("modeQuick").onclick=()=>setMode(true);
+
   $("incPrivate").addEventListener("change",e=>{ cur.incPrivate=e.target.checked; commit(); });
 
   function openScene(s){
@@ -627,7 +813,11 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
     go(firstEmpty<0?0:firstEmpty);
     document.querySelector(".builder").scrollIntoView({behavior:"smooth"});
   }
-  $("new").onclick=()=>{ cur=blank(); nameEl.value=""; try{ localStorage.removeItem(CUR); }catch(e){} go(0); nameEl.focus(); renderList(); };
+  $("new").onclick=()=>{
+    if(hasContent(cur)&&!confirm("Start a new scene? Your current scene stays saved in your backup.")) return;
+    const q=!!cur.quick; cur=blank(); cur.quick=q; nameEl.value=""; try{ localStorage.removeItem(CUR); }catch(e){}
+    document.querySelector(".menu").open=false; go(0); renderList(); window.scrollTo({top:0});
+  };
 
   function fmt(t){ return new Date(t).toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"}); }
   function renderList(){
@@ -652,7 +842,7 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
       const acts=document.createElement("div"); acts.className="acts";
       const o=document.createElement("button"); o.type="button"; o.textContent="Open"; o.onclick=()=>openScene(s);
       const p=document.createElement("button"); p.type="button"; p.textContent="Print all answers"; p.onclick=()=>printScene(s);
-      const sm=document.createElement("button"); sm.type="button"; sm.textContent="Download summary"; sm.onclick=()=>printSummary(s);
+      const sm=document.createElement("button"); sm.type="button"; sm.textContent="Save as PDF"; sm.onclick=()=>printSummary(s);
       const d=document.createElement("button"); d.type="button"; d.className="del"; d.textContent="Delete";
       d.onclick=()=>{
         if(!confirm("Delete this scene? This can’t be undone.")) return;
@@ -669,13 +859,13 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
   const rich=t=>esc(t).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   function printScene(s){
-    let h=`<h1>${esc(s&&s.name?s.name:"Scene Builder")}</h1>`;
+    let h=`<h1>${esc(s&&s.name?s.name:"Soft Kink Scene Builder")}</h1>`;
     h+= s ? `<p class="sub">Printed ${esc(fmt(Date.now()))}</p>` : `<p class="sub">Scene name: ________________________________</p>`;
     stepsFor(s).forEach((st,i)=>{
       h+=`<h2>${i+1}. ${esc(val(st.title,s))}</h2><p class="m">${rich(val(st.method,s))}</p>`;
       st.fields.forEach(f=>{
         if(f.type==="note") return;
-        if(f.type==="kept") return;
+        if(f.type==="kept"||f.type==="aside") return;
         if(f.type==="ref"){ if(s&&filled(fv(s.a,f.el))) h+=`<div class="pf"><div class="pl">From the fantasy: ${esc(f.label)}</div><p class="ans">${esc(fv(s.a,f.el))}</p></div>`; return; }
         if(f.show&&s&&!f.show(s)) return;
         if(!s&&f.blankSkip) return;
@@ -693,6 +883,7 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
         h+=`</div>`;
       });
     });
+    h+=`<p class="m" style="margin-top:20pt;border-top:1px solid #ccc;padding-top:6pt">${esc(CREDIT)}</p>`;
     printEl.innerHTML=h; window.print();
   }
   $("printBlank").onclick=()=>printScene(null);
@@ -703,33 +894,35 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
     const sec=(title,body)=>body.trim()?`<section><h2>${E(title)}</h2>${body}</section>`:"";
     const para=v=>F(v)?`<p>${E(v)}</p>`:"";
     const dl=rows=>{ const r=rows.filter(([,v])=>F(v)); return r.length?`<dl>${r.map(([k,v])=>`<dt>${E(k)}</dt><dd>${E(Array.isArray(v)?v.join(", "):v)}</dd>`).join("")}</dl>`:""; };
-    let h=`<div class="sum"><h1>${E(sc.name||"My scene")}</h1><p class="sub">Scene Builder summary, ${E(fmt(Date.now()))}</p>`;
+    let h=`<div class="sum"><h1>${E(sc.name||"My scene")}</h1><p class="sub">Soft Kink Scene Builder summary, ${E(fmt(Date.now()))}</p>`;
 
     const feels=(a.feel||[]).map(phrase);
     h+=sec("What it’s for",
       (feels.length?`<p class="big">Feeling ${E(feels.length>1?feels.slice(0,-1).join(", ")+" and "+feels.at(-1):feels[0])}</p>`:"")+para(a.longing));
-    h+=sec("The spark",para(a.peak)+para(a.peakWhy)+para(a.stronger));
-    h+=sec("What gives it charge",
-      (F(join([a.corner,a.lehm]))?`<p class="tags">${E(join([...(a.corner||[]),...(a.lehm||[])]))}</p>`:"")+para(a.tension));
+    h+=sec("The spark",para(a.peak)+para(a.peakWhy)+
+      (F(join([a.themes,a.corner,a.lehm]))?`<p class="tags">${E(join([...(a.themes||[]),...(a.corner||[]),...(a.lehm||[])]))}</p>`:""));
 
     const arc=[["How it begins",a.sc_begin],["How it builds",a.sc_build],["The peak",a.sc_peak],["How it ends and lands",a.sc_land]].filter(([,v])=>F(v));
     const kept=FANT.filter(e=>F(fv(a,e))&&a["pl_"+e.id]==="Keep it").map(e=>[e.name,fv(a,e)]);
     const changed=FANT.filter(e=>F(fv(a,e))&&a["pl_"+e.id]==="Change it").map(e=>[e.name,a["pc_"+e.id]||"(to be worked out)"]);
     h+=sec("The real scene",
+      (F(a.tryPart)?`<p class="big" style="font-size:14pt">${E(a.tryPart)}</p>`:"")+
+      (F(a.first)?`<p class="tags" style="margin-top:6pt">The smallest version to try first</p>${para(a.first)}`:"")+
+      (F(a.wheel)?`<p class="tags" style="margin-top:6pt">Who’s doing, and for whom</p>${para(a.wheel)}`:"")+
       (arc.length?`<ol class="arc">${arc.map(([k,v])=>`<li><b>${E(k)}</b>${E(v)}</li>`).join("")}</ol>`:"")+
       (kept.length||changed.length?`<p class="tags" style="margin-top:8pt">From the fantasy</p>`+dl([...kept,...changed]):"")+
       (F(join([a.prepSel,a.prep]))?`<p class="tags" style="margin-top:8pt">To get or prepare</p>${para(join([...(a.prepSel||[]),a.prep]))}`:"")+
-      (F(a.first)?`<p class="tags" style="margin-top:8pt">The smallest version to try first</p>${para(a.first)}`:""));
+      "");
 
-    h+=sec("The frame",dl([["Who it’s for, who’s doing",a.wheel],["Limits and maybes",a.limits],["Stop and slow-down signals",a.signals],["Check-ins",a.checkins],["Aftercare",a.aftercare]]));
-    h+=sec("Bringing it to my partner",
+    h+=sec("The container",dl([["Limits and maybes",a.limits],["Stop and slow-down signals",a.signals],["Check-ins",a.checkins],["Aftercare",a.aftercare]]));
+    h+=sec("Bringing it to my partner(s)",
       (F(a.opener)?`<blockquote>${E(a.opener)}</blockquote>`:"")+dl([["When and where",a.when],["What would help me feel safe after sharing?",a.hear]]));
 
     if(sc.incPrivate){
-      const priv=sec("The fantasy version",dl([...FANT.map(e=>[e.name,fv(a,e)]),["What happens",a.story]]));
+      const priv=sec("The fantasy version",dl([...FANT.map(e=>[e.name,fv(a,e)]),["Stays in the fantasy",a.leave]]));
       if(priv) h+=`<div class="private">${priv}</div>`;
     }
-    h+=`<footer>A fantasy is not a request. Any part of this can change, and every yes can become a no.</footer></div>`;
+    h+=`<footer>A fantasy is not a request. Any part of this can change, and every yes can become a no.<br>${E(CREDIT)}</footer></div>`;
     printEl.innerHTML=h; window.print();
   }
 
@@ -776,26 +969,27 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
     }
   }
   const newsText=r=> r.result==="ok" ? "Thank you! Check your inbox to confirm your signup."
-    : r.result==="unknown" ? "Thank you! If no confirmation email arrives within a few minutes, please check your spam folder."
+    : r.result==="unknown" ? "Your browser blocked the signup. This is usually an ad blocker or privacy setting. Pause it for this page and try again"+(NEWSLETTER.fallbackUrl?", or sign up on the newsletter page that just opened.":".")
     : "Sorry, the signup didn’t go through. Please try again later.";
   // plain-text version of the summary, for email
   function summaryText(sc){
     const a=sc.a, L=[], F=filled;
     const j=v=>[].concat(v||[]).filter(F).join(", ");
     const sec=(t,rows)=>{ const r=rows.filter(([,v])=>F(v)); if(!r.length) return; L.push("", t.toUpperCase()); r.forEach(([k,v])=>{ v=Array.isArray(v)?v.join(", "):v; L.push(k?`${k}: ${v}`:v); }); };
-    L.push(sc.name||"My scene", "Scene Builder summary, "+fmt(Date.now()));
+    L.push(sc.name||"My scene", "Soft Kink Scene Builder summary, "+fmt(Date.now()));
     sec("What it’s for",[["Feeling",j((a.feel||[]).map(phrase))],["",a.longing]]);
     sec("The spark",[["",a.peak],["",a.peakWhy],["",a.stronger]]);
-    sec("What gives it charge",[["",j([...(a.corner||[]),...(a.lehm||[])])],["",a.tension]]);
+    sec("Themes",[["",j([...(a.themes||[]),...(a.corner||[]),...(a.lehm||[])])]]);
     const kc=FANT.filter(e=>F(fv(a,e))&&["Keep it","Change it"].includes(a["pl_"+e.id]))
       .map(e=>[e.name,a["pl_"+e.id]==="Change it"?(a["pc_"+e.id]||"changed, details to work out"):fv(a,e)]);
-    sec("The real scene",[["How it begins",a.sc_begin],["How it builds",a.sc_build],["The peak",a.sc_peak],["How it ends and lands",a.sc_land],...kc,["To get or prepare",j([...(a.prepSel||[]),a.prep])],["Smallest version to try first",a.first]]);
-    sec("The frame",[["Who it’s for, who’s doing",a.wheel],["Limits and maybes",a.limits],["Signals",a.signals],["Check-ins",a.checkins],["Aftercare",a.aftercare]]);
-    sec("Bringing it to my partner",[["",a.opener],["When and where",a.when],["What would help me feel safe after sharing",a.hear]]);
-    if(sc.incPrivate) sec("The fantasy version (private)",[...FANT.map(e=>[e.name,fv(a,e)]),["What happens",a.story]]);
-    L.push("","A fantasy is not a request. Any part of this can change, and every yes can become a no.");
+    sec("The real scene",[["What I’d love to try",a.tryPart],["Smallest version to try first",a.first],["Who’s doing, and for whom",a.wheel],["How it begins",a.sc_begin],["How it builds",a.sc_build],["The peak",a.sc_peak],["How it ends and lands",a.sc_land],...kc,["To get or prepare",j([...(a.prepSel||[]),a.prep])]]);
+    sec("The container",[["Limits and maybes",a.limits],["Signals",a.signals],["Check-ins",a.checkins],["Aftercare",a.aftercare]]);
+    sec("Bringing it to my partner(s)",[["",a.opener],["When and where",a.when],["What would help me feel safe after sharing",a.hear]]);
+    if(sc.incPrivate) sec("The fantasy version (private)",[...FANT.map(e=>[e.name,fv(a,e)]),["Stays in the fantasy",a.leave]]);
+    L.push("","A fantasy is not a request. Any part of this can change, and every yes can become a no.","",CREDIT,OFFERS.siteUrl);
     return L.join("\n");
   }
+  $("offerSessions").href=OFFERS.sessions; $("offerWorkshops").href=OFFERS.workshops;
   $("sendBtn").onclick=async ()=>{
     const msg=$("sendMsg"), email=$("sendEmail").value.trim();
     msg.className="nlmsg";
@@ -807,12 +1001,13 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
       if(NEWSLETTER.action){ const r=await postNews(email); if(r.detail) console.warn("Newsletter signup:",r.result,r.detail); note+=" Newsletter: "+newsText(r); }
       else note+=" (The newsletter signup isn’t connected yet.)";
     }
-    const subject="My scene: "+(cur.name||"Scene Builder");
+    const subject="My scene: "+(cur.name||"Soft Kink Scene Builder");
     location.href=`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summaryText(cur))}`;
     msg.className="nlmsg ok"; msg.textContent=note;
   };
   // Soft Kink newsletter on Kit (form 9542106). Kit sends its own confirmation email (double opt-in).
-  const NEWSLETTER={action:"https://app.kit.com/forms/9542106/subscriptions", emailField:"email_address", hidden:{}};
+  const NEWSLETTER={action:"https://app.kit.com/forms/9542106/subscriptions", emailField:"email_address", hidden:{},
+    fallbackUrl:""};  // Kit's hosted page for the same form; opened if the browser blocks the signup
   const STARTED="scenes.started";
   function showApp(on){
     $("welcome").hidden=on; $("app").hidden=!on;
@@ -820,25 +1015,43 @@ label,.flabel,.stage h2,.news h2,.sources summary,.intro .ask,h1{color:var(--pro
   }
   function begin(){ try{ localStorage.setItem(STARTED,"1"); }catch(e){} showApp(true); }
   $("skip").onclick=begin;
-  $("about").onclick=()=>{ $("skip").textContent="Continue to Scene Builder"; showApp(false); };
-  $("news").addEventListener("submit",e=>{
+  $("about").onclick=()=>{ document.querySelector(".menu").open=false; $("skip").hidden=!hasContent(cur); showApp(false); };
+  const startWith=async quick=>{
+    const msg=$("nlMsg"), email=$("nlEmail").value.trim(); msg.className="nlmsg";
+    let signup=null;
+    if(email){
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg.textContent="That email doesn’t look quite right. Fix it, or clear the field to begin without it."; $("nlEmail").focus(); return; }
+      if(!$("nlConsent").checked){ msg.textContent="Tick the box if you’d like the newsletter, or clear the email field to begin without it."; return; }
+      msg.className="nlmsg ok"; msg.textContent="Signing you up…";
+      signup=await postNews(email);
+      if(signup.detail) console.warn("Newsletter signup:",signup.result,signup.detail);
+      if(signup.result==="unknown"&&NEWSLETTER.fallbackUrl) window.open(NEWSLETTER.fallbackUrl,"_blank","noopener");
+      msg.textContent=""; $("nlEmail").value=""; $("nlConsent").checked=false;
+    }
+    if(hasContent(cur)&&!!cur.quick!==quick){ cur=blank(); nameEl.value=""; }
+    cur.quick=quick; stage=0; go(0); begin();
+    if(signup) flash(newsText(signup),9000);
+  };
+  $("startDeep").onclick=()=>startWith(false);
+  $("news").addEventListener("submit",e=>{ e.preventDefault(); });
+  $("news").addEventListener("_unused",e=>{
     e.preventDefault();
     const msg=$("nlMsg"), email=$("nlEmail").value.trim();
     msg.className="nlmsg";
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg.textContent="Please enter a valid email address."; $("nlEmail").focus(); return; }
     if(!$("nlConsent").checked){ msg.textContent="Please tick the box to confirm you’d like the newsletter."; return; }
-    if(!NEWSLETTER.action){ msg.textContent="The newsletter signup isn’t connected yet. You can begin without signing up."; return; }
+    if(!NEWSLETTER.action){ msg.textContent="The newsletter signup isn’t connected yet."; return; }
     const btn=e.submitter; if(btn) btn.disabled=true;
     msg.className="nlmsg ok"; msg.textContent="Signing you up…";
     postNews(email).then(r=>{
       if(btn) btn.disabled=false;
       if(r.detail) console.warn("Newsletter signup:",r.result,r.detail);
       msg.className="nlmsg"+(r.result==="error"?"":" ok"); msg.textContent=newsText(r);
-      if(r.result!=="error") setTimeout(begin,2500);
+      if(r.result==="unknown"){ msg.className="nlmsg"; if(NEWSLETTER.fallbackUrl) window.open(NEWSLETTER.fallbackUrl,"_blank","noopener"); }
     });
   });
   let started=false; try{ started=!!localStorage.getItem(STARTED); }catch(e){}
-  if(started||hasContent(cur)) $("skip").textContent="Continue to Scene Builder";
+  if(hasContent(cur)) $("skip").hidden=false;
   showApp(false);
 
   nameEl.value=cur.name||"";
