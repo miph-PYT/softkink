@@ -269,6 +269,13 @@ footer .acts button,.addown button,.rewrite,.menu>summary{min-height:44px}
 .tosite:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .sitelink{margin:1rem 0 0;font-size:.92rem;text-align:center}
 .sitelink a{color:#1C4A45;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:.6rem .4rem}
+.backlink{border:0;background:none;padding:.5rem 0;min-height:44px;font-size:.95rem;font-weight:600;color:var(--accent);cursor:pointer;border-radius:8px}
+.backlink:hover{text-decoration:underline;text-underline-offset:3px}
+.revise{margin-top:1.1rem;padding-top:.9rem;border-top:1px solid var(--line)}
+.revisetitle{font-size:.9rem;font-weight:600;color:var(--soft);margin:0 0 .5rem}
+.revisebtns{display:flex;flex-wrap:wrap;gap:.45rem}
+.revisebtns button{min-height:44px;font-size:.88rem;padding:.4rem .9rem;background:var(--field);border:1px solid var(--fieldline);color:var(--ink)}
+
 #print{display:none}
 @media print{
   body{background:#fff;color:#000;font-size:11pt}
@@ -361,6 +368,10 @@ footer .acts button,.addown button,.rewrite,.menu>summary{min-height:44px}
         <label for="name">Give it a name</label>
         <input type="text" id="name" maxlength="100" placeholder="For example: The slow evening" autocomplete="off">
         <dl class="preview" id="preview"></dl>
+        <div class="revise">
+          <p class="revisetitle">Want to change something? Go back to</p>
+          <div class="revisebtns" id="reviseBtns"></div>
+        </div>
       </section>
 
       <section class="fcard keep" aria-labelledby="keepH">
@@ -648,6 +659,12 @@ footer .acts button,.addown button,.rewrite,.menu>summary{min-height:44px}
       const dt=document.createElement("dt"); dt.textContent=k;
       const dd=document.createElement("dd"); dd.textContent=v; dl.append(dt,dd);
     });
+    const rb=$("reviseBtns"); rb.innerHTML="";
+    [["Your feelings",0],["The spark",1],["Your fantasy",2],["Your first step",3],["The container",4],["Your opener",5]].forEach(([t,i])=>{
+      const b=document.createElement("button"); b.type="button"; b.textContent=t;
+      b.onclick=()=>{ go(i); document.querySelector(".builder").scrollIntoView({behavior:"smooth",block:"start"}); };
+      rb.append(b);
+    });
     if(!dl.children.length){ const dd=document.createElement("dd"); dd.textContent="Fill in a few steps and your scene will appear here."; dl.append(dd); }
   }
   function renderStage(){
@@ -668,6 +685,12 @@ footer .acts button,.addown button,.rewrite,.menu>summary{min-height:44px}
       }
       return groups[f.group];
     };
+    if(stage>0){
+      const bk=document.createElement("button"); bk.type="button"; bk.className="backlink";
+      bk.textContent=`← Back to ${stepsFor(cur)[stage-1].name}`;
+      bk.onclick=()=>{ go(stage-1); document.querySelector(".builder").scrollIntoView({behavior:"smooth",block:"start"}); };
+      stageEl.append(bk);
+    }
     const of=document.createElement("p"); of.className="stepof"; of.textContent=`Step ${stage+1} of ${stepsFor(cur).length}`;
     stageEl.append(of);
     const h=document.createElement("h2"); h.textContent=val(s.title,cur);
